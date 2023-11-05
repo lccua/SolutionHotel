@@ -1,6 +1,4 @@
-﻿using HotelProject.BL.Model;
-
-namespace ConsoleAppTestBL
+﻿namespace ConsoleAppTestBL
 {
     internal class Program
     {

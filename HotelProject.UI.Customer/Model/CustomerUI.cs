@@ -21,20 +21,27 @@ namespace HotelProject.UI.CustomerWPF.Model
 
         private int id;
         public int Id { get { return id; } set { id = value; OnPropertyChanged(); } }
+
         private string name;
         public string Name { get { return name; } set { name = value; OnPropertyChanged(); } }
+
         private string email;
         public string Email { get { return email; } set { email = value; OnPropertyChanged(); } }
+
         private string phone;
         public string Phone { get { return phone; } set { phone = value; OnPropertyChanged(); } }
+
         private string address;
         public string Address { get { return address; } set { address = value; OnPropertyChanged(); } }
+
         private int nrOfMembers;
         public int NrOfMembers { get { return nrOfMembers; } set { nrOfMembers = value; OnPropertyChanged(); } }
+
         private void OnPropertyChanged(string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
         public event PropertyChangedEventHandler? PropertyChanged;
     }
 }

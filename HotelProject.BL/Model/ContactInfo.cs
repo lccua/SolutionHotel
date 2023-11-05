@@ -9,7 +9,7 @@ namespace HotelProject.BL.Model
 {
     public class ContactInfo
     {
-        public ContactInfo(string email, string phone,Address address)
+        public ContactInfo(string email, string phone, Address address)
         {
             Email = email;
             Phone = phone;

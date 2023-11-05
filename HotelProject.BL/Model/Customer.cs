@@ -10,7 +10,7 @@ namespace HotelProject.BL.Model
         public int Id { get { return _id; } set { if (value <= 0) throw new CustomerException("invalid id"); _id = value; } }
         private ContactInfo _contactInfo;
         public ContactInfo ContactInfo { get { return _contactInfo; } set { if (value == null) throw new CustomerException("contactinfo null"); _contactInfo = value; } }
-        private List<Member> _members=new List<Member>();
+        private List<Member> _members = new List<Member>();
 
         public Customer(string name, int id, ContactInfo contactInfo)
         {
@@ -29,7 +29,7 @@ namespace HotelProject.BL.Model
         {
             return _members.AsReadOnly();
         }
-        public void AddMember(Member member) 
+        public void AddMember(Member member)
         {
             if (!_members.Contains(member))
                 _members.Add(member);
