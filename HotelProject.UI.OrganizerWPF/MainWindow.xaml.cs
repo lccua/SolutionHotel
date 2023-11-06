@@ -1,5 +1,12 @@
-﻿using System;
+﻿using HotelProject.BL.Managers;
+using HotelProject.BL.Model;
+using HotelProject.DL.Repositories;
+using HotelProject.UI.OrganizerWPF.Model;
+using HotelProject.Util;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,10 +19,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using HotelProject.BL.Managers;
-using HotelProject.BL.Model;
-using HotelProject.Util;
-using HotelProject.UI.OrganizerWPF.Model;
 
 
 
@@ -35,61 +38,22 @@ namespace HotelProject.UI.OrganizerWPF
             InitializeComponent();
             activityManager = new ActivityManager(RepositoryFactory.ActivityRepository);
 
-            activitiesUIs = new ObservableCollection<ActivityUI>(activityManager.GetActivities().Select(x => new ActivityUI();
+            activitiesUIs = new ObservableCollection<ActivityUI>(activityManager.GetActivities().Select(x => new ActivityUI(x.Id, x.Name, x.ScheduledDate, x.AvailableSpots, x.AdultPrice, x.ChildPrice, x.Discount, x.ActivityInfo.Desciption, x.ActivityInfo.Duration, x.ActivityInfo.Address.ToString())));
             ActivityDataGrid.ItemsSource = activitiesUIs;
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            ActivityDataGrid.ItemsSource = new ObservableCollection<ActivityUI>(activityManager.GetActivities().Select(x => new ActivityUI();
+            ActivityDataGrid.ItemsSource = new ObservableCollection<ActivityUI>(activityManager.GetActivities().Select(x => new ActivityUI(x.Id, x.Name, x.ScheduledDate, x.AvailableSpots, x.AdultPrice, x.ChildPrice, x.Discount, x.ActivityInfo.Desciption, x.ActivityInfo.Duration, x.ActivityInfo.Address.ToString())));
         }
 
-        private void MenuItemAddCustomer_Click(object sender, RoutedEventArgs e)
+        private void MenuItemAddActivity_Click(object sender, RoutedEventArgs e)
         {
-            ActivityWindow w = new ActivityWindow(false, null);
+            ActivityWindow w = new ActivityWindow(null);
 
             if (w.ShowDialog() == true)
                 activitiesUIs.Add(w.activityUI);
         }
-
-        private void MenuItemDeleteCustomer_Click(object sender, RoutedEventArgs e)
-        {
-            ActivityUI selectedActivity = (ActivityUI)ActivityDataGrid.SelectedItem;
-            int activityId = selectedActivity.Id;
-            activityManager.DeleteActivity(activityId);
-
-            activitiesUIs.Remove(selectedActivity);
-
-        }
-
-        private void MenuItemUpdateCustomer_Click(object sender, RoutedEventArgs e)
-        {
-            if (CustomerDataGrid.SelectedItem == null) MessageBox.Show("Customer not selected", "Update");
-            else
-            {
-                ActivityWindow w = new ActivityWindow(true, (ActivityUI)ActivityDataGrid.SelectedItem);
-                w.ShowDialog();
-            }
-        }
-
-        private void OpenAddCustomerWindow(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void OpenCustomerOverviewWindow(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void OpenDeleteCustomerWindow(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void OpenEditCustomerWindow(object sender, RoutedEventArgs e)
-        {
-
-        }
+       
     }
 }

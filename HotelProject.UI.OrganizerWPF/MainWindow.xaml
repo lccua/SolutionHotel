@@ -17,12 +17,12 @@
         </Grid.ColumnDefinitions>
         <TextBox Grid.Row="0" Grid.Column="0" Name="SearchTextBox" Margin="5"/>
         <Button Grid.Row="0" Grid.Column="1" Name="SearchButton" Margin="5" Content="Search" Click="SearchButton_Click"/>
-        <DataGrid Name="CustomerDataGrid" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" IsReadOnly="True" >
+        <DataGrid Name="ActivityDataGrid" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" IsReadOnly="True" >
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Add" Click="MenuItemAddCustomer_Click"></MenuItem>
-                    <MenuItem Header="Delete" Click="MenuItemDeleteCustomer_Click"></MenuItem>
-                    <MenuItem Header="Update" Click="MenuItemUpdateCustomer_Click"></MenuItem>
+                    <MenuItem Header="Add" Click="MenuItemAddActivity_Click"></MenuItem>
+                    <MenuItem Header="Delete" Click="MenuItemDeleteActivity_Click"></MenuItem>
+                    <MenuItem Header="Update" Click="MenuItemUpdateActivity_Click"></MenuItem>
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>

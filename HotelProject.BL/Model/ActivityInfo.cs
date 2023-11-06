@@ -8,9 +8,16 @@ namespace HotelProject.BL.Model
 {
     public class ActivityInfo
     {
+        public ActivityInfo(string desciption, Address address, int duration)
+        {
+            Desciption = desciption;
+            Address = address;
+            Duration = duration;
+        }
+
         public string Desciption { get; set; }
         public Address Address { get; set; }
-        public TimeSpan Duration { get; set; } // Duration of the activity.
+        public int Duration { get; set; } // Duration of the activity.
 
     }
 }

@@ -10,7 +10,7 @@ namespace HotelProject.UI.OrganizerWPF.Model
     public class ActivityUI : INotifyPropertyChanged
     {
         public ActivityUI(int id, string name, DateOnly sheduledDate, int availableSpots, decimal adultPrice, decimal childPrice, int discount, 
-                            string description, int duration, string city, int zipCode, string street, string houseNumber)
+                            string description, int duration, string address)
         {
             this.id = id;
             this.name = name;
@@ -21,10 +21,8 @@ namespace HotelProject.UI.OrganizerWPF.Model
             this.discount = discount;
             this.description = description;
             this.duration = duration;
-            this.city = city;
-            this.zipCode = zipCode;
-            this.street = street;
-            this.houseNumber = houseNumber;
+            this.address = address;
+         
          
         }
 
@@ -55,17 +53,10 @@ namespace HotelProject.UI.OrganizerWPF.Model
         private int duration;
         public int Duration { get { return duration; } set { duration = value; OnPropertyChanged(); } }
 
-        private string city;
-        public string City { get { return city; } set { city = value; OnPropertyChanged(); } }
+        private string address;
+        public string Address { get { return address; } set { address = value; OnPropertyChanged(); } }
 
-        private int zipCode;
-        public int ZipCode { get { return zipCode; } set { zipCode = value; OnPropertyChanged(); } }
-
-        private string street;
-        public string Street { get { return street; } set { street = value; OnPropertyChanged(); } }
-
-        private string houseNumber;
-        public string HouseNumber { get { return houseNumber; } set { houseNumber = value; OnPropertyChanged(); } }
+        
 
         private void OnPropertyChanged(string name = null)
         {
