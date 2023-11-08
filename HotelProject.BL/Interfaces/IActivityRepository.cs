@@ -9,8 +9,8 @@ namespace HotelProject.BL.Interfaces
 {
     public interface IActivityRepository
     {
-        List<Activity> GetActivities();
-        void AddActivity(Activity activity);
+        List<Activity> GetActivities(string filter);
+        int AddActivity(Activity activity);
         int GetLastActivityId();
 
     }

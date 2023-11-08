@@ -5,16 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HotelProject.UI.CustomerWPF"
         mc:Ignorable="d"
-        Title="CustomerWindow" Height="450" Width="800">
-    
+        Title="Customer Window" Height="430" Width="650">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" MinHeight="35.96" />
+            <RowDefinition Height="auto" MinHeight="34" />
+            <RowDefinition Height="auto" MinHeight="161" />
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -22,24 +23,32 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.Column="0" Content="Id" Margin="5"/>
-        <Label Grid.Row="0" Grid.Column="2" Content="City" Margin="5"/>
-        <Label Grid.Row="1" Grid.Column="0" Content="Name" Margin="5"/>
-        <Label Grid.Row="1" Grid.Column="2" Content="Zip" Margin="5"/>
-        <Label Grid.Row="2" Grid.Column="0" Content="Email" Margin="5"/>
-        <Label Grid.Row="2" Grid.Column="2" Content="Street" Margin="5"/>
-        <Label Grid.Row="3" Grid.Column="0" Content="Phone" Margin="5"/>
-        <Label Grid.Row="3" Grid.Column="2" Content="House number" Margin="5"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Name="IdTextBox" Margin="5" IsReadOnly="True" />
-        <TextBox Grid.Row="0" Grid.Column="3" Name="CityTextBox" Margin="5"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Name="NameTextBox" Margin="5"/>
-        <TextBox Grid.Row="1" Grid.Column="3" Name="ZipTextBox" Margin="5"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Name="EmailTextBox" Margin="5"/>
-        <TextBox Grid.Row="2" Grid.Column="3" Name="StreetTextBox" Margin="5"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Name="PhoneTextBox" Margin="5"/>
-        <TextBox Grid.Row="3" Grid.Column="3" Name="HouseNumberTextBox" Margin="5"/>
-        <DataGrid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" Margin="5" Name="MemberDataGrid"/>
-        <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Name="CancelButton" Content="Cancel" Click="CancelButton_Click"/>
-        <Button Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" Margin="5" Name="AddButton" Content="Add" Click="AddButton_Click"/>
+        <Label Grid.Row="0" Grid.Column="0" Content="Id" Margin="5,5,5,5"/>
+        <Label Grid.Row="0" Grid.Column="2" Content="City" Margin="5,5,5,5"/>
+        <Label Grid.Row="1" Grid.Column="0" Content="Name" Margin="5,5,5,5"/>
+        <Label Grid.Row="1" Grid.Column="2" Content="Zip" Margin="5,5,5,5"/>
+        <Label Grid.Row="2" Grid.Column="0" Content="Email" Margin="5,5,5,5"/>
+        <Label Grid.Row="2" Grid.Column="2" Content="Street" Margin="5,5,5,5"/>
+        <Label Grid.Row="3" Grid.Column="0" Content="Phone" Margin="5,5,5,5"/>
+        <Label Grid.Row="3" Grid.Column="2" Content="House number" Margin="5,5,5,5"/>
+        <Label Grid.Row="4" Grid.Column="0" Content="Member(s)" Margin="5,5,5,5"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Name="IdTextBox" Margin="5,5,5,5" IsReadOnly="True" />
+        <TextBox Grid.Row="0" Grid.Column="3" Name="CityTextBox" Margin="5,5,5,5"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Name="NameTextBox" Margin="5,5,5,5"/>
+        <TextBox Grid.Row="1" Grid.Column="3" Name="ZipTextBox" Margin="5,5,5,5"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Name="EmailTextBox" Margin="5,5,5,5"/>
+        <TextBox Grid.Row="2" Grid.Column="3" Name="StreetTextBox" Margin="5,5,5,5"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Name="PhoneTextBox" Margin="5,5,5,5"/>
+        <TextBox Grid.Row="3" Grid.Column="3" Name="HouseNumberTextBox" Margin="5,5,5,5"/>
+        <DataGrid Name="MemberDataGrid" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Margin="5,5,5,5" IsReadOnly="True" >
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Add Member" Click="MenuItemAddMember_Click"></MenuItem>
+                    <MenuItem Header="Delete Member" Click="MenuItemDeleteMember_Click"></MenuItem>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+        <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,10,5,5" Name="CancelButton" Content="Cancel" Click="CancelButton_Click"/>
+        <Button Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2" Margin="5,10,5,5" Name="AddButton" Content="Add Customer" Click="AddButton_Click"/>
     </Grid>
 </Window>

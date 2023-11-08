@@ -29,14 +29,18 @@ namespace HotelProject.UI.CustomerWPF
     {
         private CustomerManager customerManager;
 
+        public List<Customer> customers;
+
         private ObservableCollection<CustomerUI> customersUIs=new ObservableCollection<CustomerUI>();
 
         public MainWindow()
         {
             InitializeComponent();
-            customerManager = new CustomerManager(RepositoryFactory.CustomerRepository);       
+            customerManager = new CustomerManager(RepositoryFactory.CustomerRepository);
+            customers =  customerManager.GetCustomers(null);
 
-            customersUIs= new ObservableCollection<CustomerUI>(customerManager.GetCustomers(null).Select(x => new CustomerUI(x.Id, x.Name, x.ContactInfo.Email, x.ContactInfo.Phone, x.ContactInfo.Address.ToString(), x.GetMembers().Count)));
+            customersUIs = new ObservableCollection<CustomerUI>(customers.Select(x => new CustomerUI(x.Id, x.Name, x.ContactInfo.Email, x.ContactInfo.Phone, x.ContactInfo.Address.ToString(), x.GetMembers().Count)));
+            
             CustomerDataGrid.ItemsSource = customersUIs;
         }
 
@@ -47,7 +51,7 @@ namespace HotelProject.UI.CustomerWPF
 
         private void MenuItemAddCustomer_Click(object sender, RoutedEventArgs e)
         {
-            CustomerWindow w = new CustomerWindow(false,null);
+            CustomerWindow w = new CustomerWindow(false, null, customers);
 
             if (w.ShowDialog()==true)
                 customersUIs.Add(w.customerUI);
@@ -68,29 +72,11 @@ namespace HotelProject.UI.CustomerWPF
             if (CustomerDataGrid.SelectedItem == null) MessageBox.Show("Customer not selected","Update");
             else
             {
-                CustomerWindow w = new CustomerWindow(true,(CustomerUI)CustomerDataGrid.SelectedItem);
+                CustomerWindow w = new CustomerWindow(true,(CustomerUI)CustomerDataGrid.SelectedItem, customers);
                 w.ShowDialog();
             }
         }
 
-        private void OpenAddCustomerWindow(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void OpenCustomerOverviewWindow(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void OpenDeleteCustomerWindow(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void OpenEditCustomerWindow(object sender, RoutedEventArgs e)
-        {
-
-        }
+      
     }
 }

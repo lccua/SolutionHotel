@@ -20,88 +20,71 @@ namespace HotelProject.DL.Repositories
             this.connectionString = connectionString;
         }
 
-        public List<Customer> GetCustomers(string filter)
+        public List<Customer> GetCustomers(string searchFilter)
         {
-            try
+            List<Customer> customers = new List<Customer>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                Dictionary<int, Customer> customers = new Dictionary<int, Customer>();
-                string sql;
+                connection.Open();
 
-                if (string.IsNullOrEmpty(filter))
+                // Retrieve customer information with an optional search filter
+                string customerQuery = "SELECT * FROM Customer t1 WHERE t1.status = 1"; // Always true
+                if (!string.IsNullOrEmpty(searchFilter))
                 {
-                    sql = @"
-                        SELECT
-                            t1.id,
-                            t1.email,
-                            t1.name AS customername,
-                            t1.address,
-                            t1.phone,
-                            t2.name AS membername,
-                            t2.birthday
-                        FROM
-                            customer t1
-                        LEFT JOIN
-                            (SELECT * FROM member WHERE status = 1) t2
-                        ON
-                            t1.id = t2.id
-                        WHERE
-                            t1.status = 1";
+                    customerQuery += " AND (t1.ID LIKE @filter OR t1.name LIKE @filter OR t1.email LIKE @filter)";
                 }
 
-                else
+                using (SqlCommand customerCommand = new SqlCommand(customerQuery, connection))
                 {
-                    sql = @"
-                        SELECT
-                            t1.id,
-                            t1.email,
-                            t1.name AS customername,
-                            t1.address,
-                            t1.phone,
-                            t2.name AS membername,
-                            t2.birthday
-                        FROM
-                            customer t1
-                        LEFT JOIN
-                            (SELECT * FROM member WHERE status = 1) t2
-                        ON
-                            t1.id = t2.customerId
-                        WHERE
-                            t1.status = 1
-                        AND
-                            (t1.id LIKE @filter OR t1.name LIKE @filter OR t1.email LIKE @filter)";
-                }
+                    if (!string.IsNullOrEmpty(searchFilter))
+                    {
+                        customerCommand.Parameters.AddWithValue("@filter", "%" + searchFilter + "%");
+                    }
 
-                using(SqlConnection conn = new SqlConnection(connectionString)) 
-                using(SqlCommand cmd = conn.CreateCommand())
-                {
-                    conn.Open();
-                    cmd.CommandText = sql;
-                    cmd.Parameters.AddWithValue("@filter", $"%{filter}%");
-                    SqlDataReader reader=cmd.ExecuteReader();
-                    if (reader.HasRows)
-                        while (reader.Read())
+                    using (SqlDataReader customerReader = customerCommand.ExecuteReader())
+                    {
+                        while (customerReader.Read())
                         {
-                            int id= Convert.ToInt32(reader["ID"]);
-                            if (!customers.ContainsKey(id)) //member toevoegen
-                            {
-                               customers.Add(id, new Customer((string)reader["customername"], (int)reader["id"], new ContactInfo((string)reader["email"], (string)reader["phone"], new Address((string)reader["address"]))));                              
-                            }
-                            if (!reader.IsDBNull(reader.GetOrdinal("membername")))
-                            {
-                                customers[id].AddMember(new Member((string)reader["membername"], DateOnly.FromDateTime((DateTime)reader["birthday"])));
-                            }                            
+                            Customer customer = new Customer((string)customerReader["name"], (int)customerReader["id"], 
+                                                new ContactInfo((string)customerReader["email"], (string)customerReader["phone"], 
+                                                new Address((string)customerReader["address"])));
+
+
+                            // Populate other properties of the Customer object
+                            customers.Add(customer);
                         }
-                    return customers.Values.ToList();
+                    }
+                }
+
+                // Retrieve members associated with each customer
+                foreach (Customer customer in customers)
+                {
+                    string memberQuery = "SELECT * FROM Member WHERE customer_id = @CustomerId AND status = 1";
+                    using (SqlCommand memberCommand = new SqlCommand(memberQuery, connection))
+                    {
+                        memberCommand.Parameters.AddWithValue("@CustomerId", customer.Id);
+
+                        using (SqlDataReader memberReader = memberCommand.ExecuteReader())
+                        {
+                            while (memberReader.Read())
+                            {
+                                Member member = new Member((int)memberReader["id"],(string)memberReader["name"], DateOnly.FromDateTime((DateTime)memberReader["birthday"]));
+
+                                // Populate other properties of the Member object
+                                customer.AddMember(member);
+                            }
+                        }
+                    }
                 }
             }
-            catch(Exception ex)
-            {
-                throw new CustomerRepositoryException("GetCustomer",ex);
-            }
+
+            return customers;
         }
 
-        public void AddCustomer(Customer customer)
+        public int AddCustomer(Customer customer)
         {
+            int id = 0;
             try
             {
                 string SQL = "INSERT INTO Customer(name,email,phone,address,status) output INSERTED.ID VALUES(@name,@email,@phone,@address,@status) ";
@@ -120,9 +103,11 @@ namespace HotelProject.DL.Repositories
                         cmd.Parameters.AddWithValue("@phone", customer.ContactInfo.Phone);
                         cmd.Parameters.AddWithValue("@address", customer.ContactInfo.Address.ToAddressLine());
                         cmd.Parameters.AddWithValue("@status", 1);
-                        int id=(int)cmd.ExecuteScalar();
+                        id=(int)cmd.ExecuteScalar();
+
+
                         //write members table
-                        SQL = "INSERT INTO member(name,birthday,customerid,status) VALUES(@name,@birthday,@customerid,@status) ";
+                        SQL = "INSERT INTO member(name,birthday,customer_id,status) VALUES(@name,@birthday,@customerid,@status) ";
                         cmd.CommandText=SQL;
                         
                         foreach(Member member in customer.GetMembers())
@@ -146,30 +131,7 @@ namespace HotelProject.DL.Repositories
             {
                 throw new CustomerRepositoryException("AddCustomer", ex);
             }
-        }
-
-        public int GetLastCustomerId()
-        {
-            int lastId = -1; // Default value if no rows are found.
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                string sql = $"SELECT MAX(id) FROM Customer";
-
-                using (SqlCommand command = new SqlCommand(sql, connection))
-                {
-                    object result = command.ExecuteScalar();
-
-                    if (result != DBNull.Value)
-                    {
-                        lastId = Convert.ToInt32(result);
-                    }
-                }
-            }
-
-            return lastId;
+            return id;
         }
 
         public void DeleteCustomer(int customerId)
@@ -186,6 +148,40 @@ namespace HotelProject.DL.Repositories
                     try
                     {
                         command.Parameters.AddWithValue("@CustomerId", customerId);
+                        int rowsAffected = command.ExecuteNonQuery(); // Execute the SQL command to update the status.
+
+                        if (rowsAffected > 0)
+                        {
+                            transaction.Commit(); // Commit the transaction if the update was successful.
+                        }
+                        else
+                        {
+                            transaction.Rollback(); // Rollback the transaction if no rows were updated (customer not found).
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback(); // Rollback the transaction if an exception occurs.
+                        throw; // Re-throw the exception for further handling.
+                    }
+                }
+            }
+        }
+
+        public void DeleteMember(int memberId)
+        {
+            string sql = "UPDATE Member SET status = 0 WHERE ID = @MemberId";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                SqlTransaction transaction = connection.BeginTransaction();
+
+                using (SqlCommand command = new SqlCommand(sql, connection, transaction))
+                {
+                    try
+                    {
+                        command.Parameters.AddWithValue("@MemberId", memberId);
                         int rowsAffected = command.ExecuteNonQuery(); // Execute the SQL command to update the status.
 
                         if (rowsAffected > 0)

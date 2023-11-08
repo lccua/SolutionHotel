@@ -11,15 +11,57 @@ namespace HotelProject.BL.Model
     {
         public Member(string name, DateOnly birthDay)
         {
-            Name = name;
-            BirthDay = birthDay;
+            _name = name;
+            _birthDay = birthDay;
         }
+
+        public Member(int id, string name, DateOnly birthDay)
+        {
+            _id = id;
+            _name = name;
+            _birthDay = birthDay;
+        }
+
+        public Member()
+        {
+            
+        }
+
+        private int _id;
+        public int Id
+        {
+            get { return _id; }
+            set { ValidateId(value); }
+        }
+
+        private void ValidateId(int value)
+        {
+            if (value <= 0)
+            {
+                throw new Exception("Invalid ID");
+            }
+            _id = value;
+        }
+
+
         private string _name;
         public string Name { get { return _name; } set { if (string.IsNullOrWhiteSpace(value)) throw new MemberException("name is empty"); _name = value; } }
+        
         private DateOnly _birthDay;
-        public DateOnly BirthDay { get { return _birthDay; } set { if (value > DateOnly.FromDateTime(DateTime.Now)) throw new MemberException("birthday invalid"); _birthDay = value; } }
+        public DateOnly BirthDay 
+        { 
+            get { return _birthDay; } 
+            set 
+            {
+                DateTime currentDate = DateTime.Now;
+                DateOnly current = new DateOnly(currentDate.Year, currentDate.Month, currentDate.Day);
 
-        public override bool Equals(object? obj)
+                if (value < current) throw new MemberException("birthday invalid"); 
+                _birthDay = value; 
+            } 
+        }
+
+       /* public override bool Equals(object? obj)
         {
             return obj is Member member &&
                    _name == member._name &&
@@ -29,6 +71,6 @@ namespace HotelProject.BL.Model
         public override int GetHashCode()
         {
             return HashCode.Combine(_name, _birthDay);
-        }
+        }*/
     }
 }

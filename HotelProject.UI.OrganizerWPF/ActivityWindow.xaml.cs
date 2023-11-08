@@ -33,32 +33,31 @@ namespace HotelProject.UI.OrganizerWPF
 
             this.activityUI = activityUI;
 
-            if (activityUI != null)
-            {
-                //change textbox names in wpf xaml
-                IdTextBox.Text = activityUI.Id.ToString();
-                NameTextBox.Text = activityUI.Name.ToString();
-                
-                //add more pls
-             
-
-            }
+           
         }
 
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-           
-           
-            Activity a = new Activity();
+            decimal adultPriceParsed = decimal.Parse(AdultPriceTextBox.Text);
+            decimal childPriceParsed = decimal.Parse(ChildPriceTextBox.Text);
+            int discountParsed = int.Parse(DiscountTextBox.Text);
+            int availableSpotsParsed = int.Parse(AvailableSpotsTextBox.Text);
+            int durationParsed = int.Parse(DurationTextBox.Text);
 
-            activityManager.AddActivity(a);
+            DateTime? sheduledDate = SheduledDate.SelectedDate;
+            DateTime? scheduledDate = SheduledDate.SelectedDate;
+            string scheduledDateParsed = scheduledDate.HasValue ? scheduledDate.Value.ToString("yyyy-MM-dd") : string.Empty;
 
-            int lastId = activityManager.GetLastActivityId();
-            int currentId = lastId;
+
+
+            Activity a = new Activity(NameTextBox.Text, new ActivityInfo(DescriptionTextBox.Text, new Address(CityTextBox.Text, ZipCodeTextBox.Text, HouseNumberTextBox.Text, StreetTextBox.Text), durationParsed), scheduledDateParsed, availableSpotsParsed, adultPriceParsed, childPriceParsed, discountParsed);
+
+            
+            int currentId = activityManager.AddActivity(a);
             a.Id = currentId;
 
-            ActivityUI = new ActivityUI();
+            activityUI = new ActivityUI(a.Id, a.Name, a.ScheduledDate, a.AvailableSpots, a.AdultPrice, a.ChildPrice, a.Discount, a.ActivityInfo.Desciption, a.ActivityInfo.Duration, a.ActivityInfo.Address.ToString());
          
             DialogResult = true;
             Close();

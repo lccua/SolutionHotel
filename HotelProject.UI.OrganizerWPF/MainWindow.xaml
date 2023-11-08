@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:HotelProject.UI.CustomerWPF"
+        xmlns:local="clr-namespace:HotelProject.UI.OrganizerWPF"
         mc:Ignorable="d"
         Title="Activity Management" Height="450" Width="1000">
     <Grid>
@@ -21,8 +21,6 @@
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Add" Click="MenuItemAddActivity_Click"></MenuItem>
-                    <MenuItem Header="Delete" Click="MenuItemDeleteActivity_Click"></MenuItem>
-                    <MenuItem Header="Update" Click="MenuItemUpdateActivity_Click"></MenuItem>
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>

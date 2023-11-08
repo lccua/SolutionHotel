@@ -12,6 +12,12 @@ namespace HotelProject.BL.Model
         public ContactInfo ContactInfo { get { return _contactInfo; } set { if (value == null) throw new CustomerException("contactinfo null"); _contactInfo = value; } }
         private List<Member> _members = new List<Member>();
 
+        public Customer()
+        {
+            
+        }
+
+
         public Customer(string name, int id, ContactInfo contactInfo)
         {
             _name = name;
@@ -25,9 +31,9 @@ namespace HotelProject.BL.Model
             _contactInfo = contactInfo;
         }
 
-        public IReadOnlyList<Member> GetMembers()
+        public List<Member> GetMembers()
         {
-            return _members.AsReadOnly();
+            return _members;
         }
         public void AddMember(Member member)
         {

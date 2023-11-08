@@ -31,27 +31,15 @@ namespace HotelProject.BL.Managers
             }
         }
 
-        public void AddCustomer(Customer customer)
+        public int AddCustomer(Customer customer)
         {
             try
             {
-                _customerRepository.AddCustomer(customer);
+                return _customerRepository.AddCustomer(customer);
             }
             catch (Exception ex)
             {
                 throw new CustomerManagerException("AddCustomer", ex);
-            }
-        }
-
-        public int GetLastCustomerId()
-        {
-            try
-            {
-                return _customerRepository.GetLastCustomerId();
-            }
-            catch (Exception ex)
-            {
-                throw new CustomerManagerException("GetLastCustomerId", ex);
             }
         }
 
@@ -64,6 +52,18 @@ namespace HotelProject.BL.Managers
             catch (Exception ex)
             {
                 throw new CustomerManagerException("DeleteCustomer", ex);
+            }
+        }
+
+        public void DeleteMember(int memberId)
+        {
+            try
+            {
+                _customerRepository.DeleteMember(memberId);
+            }
+            catch (Exception ex)
+            {
+                throw new CustomerManagerException("DeleteMember", ex);
             }
         }
 

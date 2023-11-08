@@ -38,13 +38,13 @@ namespace HotelProject.UI.OrganizerWPF
             InitializeComponent();
             activityManager = new ActivityManager(RepositoryFactory.ActivityRepository);
 
-            activitiesUIs = new ObservableCollection<ActivityUI>(activityManager.GetActivities().Select(x => new ActivityUI(x.Id, x.Name, x.ScheduledDate, x.AvailableSpots, x.AdultPrice, x.ChildPrice, x.Discount, x.ActivityInfo.Desciption, x.ActivityInfo.Duration, x.ActivityInfo.Address.ToString())));
+            activitiesUIs = new ObservableCollection<ActivityUI>(activityManager.GetActivities(null).Select(x => new ActivityUI(x.Id, x.Name, x.ScheduledDate, x.AvailableSpots, x.AdultPrice, x.ChildPrice, x.Discount, x.ActivityInfo.Desciption, x.ActivityInfo.Duration, x.ActivityInfo.Address.ToString())));
             ActivityDataGrid.ItemsSource = activitiesUIs;
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            ActivityDataGrid.ItemsSource = new ObservableCollection<ActivityUI>(activityManager.GetActivities().Select(x => new ActivityUI(x.Id, x.Name, x.ScheduledDate, x.AvailableSpots, x.AdultPrice, x.ChildPrice, x.Discount, x.ActivityInfo.Desciption, x.ActivityInfo.Duration, x.ActivityInfo.Address.ToString())));
+            ActivityDataGrid.ItemsSource = new ObservableCollection<ActivityUI>(activityManager.GetActivities(SearchTextBox.Text).Select(x => new ActivityUI(x.Id, x.Name, x.ScheduledDate, x.AvailableSpots, x.AdultPrice, x.ChildPrice, x.Discount, x.ActivityInfo.Desciption, x.ActivityInfo.Duration, x.ActivityInfo.Address.ToString())));
         }
 
         private void MenuItemAddActivity_Click(object sender, RoutedEventArgs e)

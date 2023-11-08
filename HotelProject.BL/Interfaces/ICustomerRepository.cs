@@ -10,9 +10,9 @@ namespace HotelProject.BL.Interfaces
     public interface ICustomerRepository
     {
         List<Customer> GetCustomers(string filter);
-        void AddCustomer(Customer customer);
-        int GetLastCustomerId();
+        int AddCustomer(Customer customer);
         void DeleteCustomer (int customerId);
-        void UpdateCustomer(Customer customer, int id); 
+        void UpdateCustomer(Customer customer, int id);
+        void DeleteMember(int memberId);
     }
 }

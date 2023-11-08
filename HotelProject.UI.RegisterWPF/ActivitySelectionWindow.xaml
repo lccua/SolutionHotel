@@ -1,0 +1,76 @@
+﻿<Window x:Class="HotelProject.UI.RegisterWPF.ActivitySelectionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HotelProject.UI.RegisterWPF"
+        mc:Ignorable="d"
+        Title="Activity Selection Window" Height="350
+        " Width="800">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto"  />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition/>
+
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Content="Select Activity" Margin="5,5,5,5"/>
+        <ComboBox Name="ActivityComboBox" Grid.Row="0" Grid.Column="1" Margin="10,5,10,5" DisplayMemberPath="Name" SelectionChanged="ActivityComboBox_SelectionChanged" />
+
+
+
+        <Label Grid.Row="0" Grid.Column="2" Content="Description" Margin="5,5,5,5"/>
+        <TextBox Name="DescriptionTextBox" Grid.Row="0" Grid.Column="3" FontSize="16" Text="{Binding Desription}" Margin="10,5,10,5" IsReadOnly="True"/>
+
+
+        <Label Grid.Row="1" Grid.Column="0" Content="Activity Name" Margin="5,5,5,5"/>
+        <TextBox  Name="ActivityNameTextBox" Grid.Row="1" Grid.Column="1" FontSize="16" Text="{Binding ActivityName}" Margin="10,5,10,5" IsReadOnly="True"/>
+
+        <Label Grid.Row="1" Grid.Column="2" Content="Duration (hours)" Margin="5,5,5,5"/>
+        <TextBox  Name="DurationTextBox" Grid.Row="1" Grid.Column="3" FontSize="16" Text="{Binding Duration}" Margin="10,5,10,5" IsReadOnly="True"/>
+
+        <Label Grid.Row="2" Grid.Column="0" Content="Sheduled Date" Margin="5,5,5,5"/>
+        <TextBox  Name="SheduledDateTextBox" Grid.Row="2" Grid.Column="1" FontSize="16" Text="{Binding SheduledDate}" Margin="10,5,10,5" IsReadOnly="True"/>
+
+        <Label Grid.Row="2" Grid.Column="2" Content="City" Margin="5,5,5,5"/>
+        <TextBox  Name="CityTextBox" Grid.Row="2" Grid.Column="3" FontSize="16" Text="{Binding City}" Margin="10,5,10,5" IsReadOnly="True" />
+
+        <Label Grid.Row="3" Grid.Column="0" Content="Available Spots" Margin="5,5,5,5"/>
+        <TextBox  Name="AvailableSpotsTextBox" Grid.Row="3" Grid.Column="1" FontSize="16" Text="{Binding AvailableSpots}" Margin="10,5,10,5" IsReadOnly="True" />
+
+        <Label Grid.Row="3" Grid.Column="2" Content="Zip Code" Margin="5,5,5,5"/>
+        <TextBox  Name="ZipCodeTextBox" Grid.Row="3" Grid.Column="3" FontSize="16" Text="{Binding ZipCode}" Margin="10,5,10,5" IsReadOnly="True" />
+
+        <Label Grid.Row="4" Grid.Column="0" Content="Adult Price (€)" Margin="5,5,5,5"/>
+        <TextBox  Name="AdultPriceTextBox" Grid.Row="4" Grid.Column="1" FontSize="16" Text="{Binding AdultPrice}" Margin="10,5,10,5" IsReadOnly="True" />
+
+        <Label Grid.Row="4" Grid.Column="2" Content="Street" Margin="5,5,5,5"/>
+        <TextBox  Name="StreetTextBox" Grid.Row="4" Grid.Column="3" FontSize="16" Text="{Binding Street}" Margin="10,5,10,5" IsReadOnly="True"/>
+
+        <Label Grid.Row="5" Grid.Column="0" Content="Child Price (€)" Margin="5,5,5,5"/>
+        <TextBox  Name="ChildPriceTextBox" Grid.Row="5" Grid.Column="1" FontSize="16" Text="{Binding ChildPrice}" Margin="10,5,10,5" IsReadOnly="True"/>
+
+        <Label Grid.Row="5" Grid.Column="2" Content="House Number" Margin="5,5,5,5"/>
+        <TextBox  Name="HouseNumberTextBox" Grid.Row="5" Grid.Column="3" FontSize="16" Text="{Binding HouseNumber}" Margin="10,5,10,5" IsReadOnly="True"/>
+
+        <Label Grid.Row="6" Grid.Column="0" Content="Discount (%)" Margin="5,5,5,5"/>
+        <TextBox  Name="DiscountTextBox" Grid.Row="6" Grid.Column="1" FontSize="16" Text="{Binding Discount}" Margin="10,5,10,5" IsReadOnly="True"/>
+
+        <Button Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,10,5,19" Name="CancelButton" Content="Cancel" Click="CancelButton_Click"/>
+        <Button  Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" Margin="5,10,5,19" Name="SelectButton" Content="Select" Click="SelectButton_Click"/>
+
+    </Grid>
+</Window>

@@ -9,7 +9,7 @@ namespace HotelProject.UI.OrganizerWPF.Model
 {
     public class ActivityUI : INotifyPropertyChanged
     {
-        public ActivityUI(int id, string name, DateOnly sheduledDate, int availableSpots, decimal adultPrice, decimal childPrice, int discount, 
+        public ActivityUI(int id, string name, string sheduledDate, int availableSpots, decimal adultPrice, decimal childPrice, int discount, 
                             string description, int duration, string address)
         {
             this.id = id;
@@ -32,8 +32,8 @@ namespace HotelProject.UI.OrganizerWPF.Model
         private string name;
         public string Name { get { return name; } set { name = value; OnPropertyChanged(); } }
 
-        private DateOnly sheduledDate;
-        public DateOnly SheduledDate { get { return sheduledDate; } set { sheduledDate = value; OnPropertyChanged(); } }
+        private string sheduledDate;
+        public string SheduledDate { get { return sheduledDate; } set { sheduledDate = value; OnPropertyChanged(); } }
 
         private int availableSpots;
         public int AvailableSpots { get { return availableSpots; } set { availableSpots = value; OnPropertyChanged(); } }

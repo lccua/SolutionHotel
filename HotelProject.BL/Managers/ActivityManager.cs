@@ -19,22 +19,22 @@ namespace HotelProject.BL.Managers
             _activityRepository = activityRepository;
         }
 
-        public List<Activity> GetActivities()
+        public List<Activity> GetActivities(string filter)
         {
             try
             {
-                return _activityRepository.GetActivities();
+                return _activityRepository.GetActivities(filter);
             }
             catch (Exception ex)
             {
                 throw new ActivityManagerException("GetAllActivities", ex);
             }
         }
-        public void AddActivity(Activity activity)
+        public int AddActivity(Activity activity)
         {
             try
             {
-                _activityRepository.AddActivity(activity);
+                 return _activityRepository.AddActivity(activity);
             }
             catch (Exception ex)
             {

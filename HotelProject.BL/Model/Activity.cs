@@ -8,7 +8,7 @@ namespace HotelProject.BL.Model
 {
     public class Activity
     {
-        public Activity(string name, ActivityInfo activityInfo, DateOnly scheduledDate, int availableSpots, decimal adultPrice, decimal childPrice, int discount)
+        public Activity(string name, ActivityInfo activityInfo, string scheduledDate, int availableSpots, decimal adultPrice, decimal childPrice, int discount)
         {
             Name = name;
             ActivityInfo = activityInfo;
@@ -19,12 +19,17 @@ namespace HotelProject.BL.Model
             Discount = discount;
         }
 
+        public Activity()
+        {
+                
+        }
+
         public int Id { get; set; }
 
         public string Name { get; set; }
         public ActivityInfo ActivityInfo { get; set; }
 
-        public DateOnly ScheduledDate { get; set; }
+        public string ScheduledDate { get; set; }
         public int AvailableSpots { get; set; }
 
 
