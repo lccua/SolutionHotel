@@ -1,4 +1,5 @@
 ﻿using HotelProject.BL.Managers;
+using HotelProject.Util;
 using HotelProject.BL.Model;
 using HotelProject.UI.CustomerWPF.Model;
 using HotelProject.UI.CustomerWPF;
@@ -16,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Runtime.ConstrainedExecution;
+using HotelProject.BL.Model;
 
 namespace HotelProject.UI.RegisterWPF
 {
@@ -26,12 +28,18 @@ namespace HotelProject.UI.RegisterWPF
     {
         private Customer selectedCustomer; // Member variable to store the selected customer
         private List<Member> selectedMembers;
-      
+        private Activity selectedActivity;
+        private RegistrationManager registrationManager;
+        decimal totalPrice = 0;
 
         public RegistrationWindow(Customer customer)
         {
             InitializeComponent();
+            registrationManager = new RegistrationManager(RepositoryFactory.RegistrationRepository);
+
             selectedCustomer = customer; // Store the selected customer
+
+
 
             CustomerNameTextBox.Text = selectedCustomer.Name;
 
@@ -46,7 +54,15 @@ namespace HotelProject.UI.RegisterWPF
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
+            Registration newRegistration = new Registration(selectedCustomer, selectedActivity, selectedMembers, totalPrice);
 
+            registrationManager.SaveRegistration(newRegistration);
+
+            MessageBox.Show("Registration has been created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+
+            
+            Close();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -58,13 +74,14 @@ namespace HotelProject.UI.RegisterWPF
         {
             // Create an instance of the new window
             ActivitySelectionWindow activitySelectionWindow = new ActivitySelectionWindow();
+            
 
 
 
             if (activitySelectionWindow.ShowDialog() == true)
             {
-                string activityName = activitySelectionWindow.selectedActivityName;
-                ActivityNameTextBox.Text = activityName;
+                selectedActivity = activitySelectionWindow.selectedActivity;
+                ActivityNameTextBox.Text = selectedActivity.Name;
             }
 
         }
@@ -72,6 +89,13 @@ namespace HotelProject.UI.RegisterWPF
         private void MembersListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             selectedMembers = MembersListBox.SelectedItems.Cast<Member>().ToList();
+           
+            totalPrice = 0;
+
+            totalPrice = registrationManager.CalculateTotalPrice(selectedMembers, selectedActivity);
+
+            // Display the total price in the TextBox
+            TotalPriceTextBox.Text = totalPrice.ToString("C"); // Assuming TotalPriceTextBox is the name of your TextBox
 
         }
     }

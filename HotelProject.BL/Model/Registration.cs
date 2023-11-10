@@ -9,11 +9,12 @@ namespace HotelProject.BL.Model
 {
     public class Registration
     {
-        public Registration(Customer customer, Activity activity, List<Member> members)
+        public Registration(Customer customer, Activity activity, List<Member> members, decimal totalPrice)
         {
             _customer = customer;
             _activity = activity;
             _members = members;
+            _totalPrice = totalPrice;
         }
 
         private int _id;

@@ -5,25 +5,65 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HotelProject.UI.OrganizerWPF"
         mc:Ignorable="d"
-        Title="Activity Management" Height="450" Width="1000">
+        Title="Login and Registration" Height="400" Width="400">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <TextBox Grid.Row="0" Grid.Column="0" Name="SearchTextBox" Margin="5"/>
-        <Button Grid.Row="0" Grid.Column="1" Name="SearchButton" Margin="5" Content="Search" Click="SearchButton_Click"/>
-        <DataGrid Name="ActivityDataGrid" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" IsReadOnly="True" >
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Add" Click="MenuItemAddActivity_Click"></MenuItem>
-                </ContextMenu>
-            </DataGrid.ContextMenu>
-        </DataGrid>
-    </Grid>
+        <TabControl>
+            <!-- Registration Tab -->
+            <TabItem Header="Register">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="58*"/>
+                        <ColumnDefinition Width="139*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Username:" HorizontalAlignment="Left" Margin="8,10,0,0" VerticalAlignment="Top" Height="26" Width="66"/>
+                    <TextBox x:Name="RegisterUsernameTextBox" HorizontalAlignment="Left" Margin="0,14,0,0" VerticalAlignment="Top" Width="200" Grid.Column="1" Height="18"/>
 
+                    <Label Content="Password:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Height="26" Width="62"/>
+                    <PasswordBox x:Name="RegisterPasswordBox" HorizontalAlignment="Left" Margin="0,44,0,0" VerticalAlignment="Top" Width="200" Grid.Column="1" Height="18"/>
+
+                    <Label Content="Name:" HorizontalAlignment="Left" Margin="19,71,0,0" VerticalAlignment="Top" Height="26" Width="44"/>
+                    <TextBox x:Name="NameTextBox" HorizontalAlignment="Left" Margin="0,75,0,0" VerticalAlignment="Top" Width="200" Grid.Column="1" Height="18"/>
+
+                    <Label Content="Phone:" HorizontalAlignment="Left" Margin="20,106,0,0" VerticalAlignment="Top" Height="26" Width="46"/>
+                    <TextBox x:Name="PhoneTextBox" HorizontalAlignment="Left" Margin="0,110,0,0" VerticalAlignment="Top" Width="200" Grid.Column="1" Height="18"/>
+
+                    <Label Content="Email:" HorizontalAlignment="Left" Margin="23,137,0,0" VerticalAlignment="Top" Height="26" Width="41"/>
+                    <TextBox x:Name="EmailTextBox" HorizontalAlignment="Left" Margin="0,141,0,0" VerticalAlignment="Top" Width="200" Grid.Column="1" Height="18"/>
+
+                    <Label Content="City:" HorizontalAlignment="Left" Margin="27,170,0,0" VerticalAlignment="Top" Height="26" Width="33"/>
+                    <TextBox x:Name="CityTextBox" HorizontalAlignment="Left" Margin="0,174,0,0" VerticalAlignment="Top" Width="200" Grid.Column="1" Height="18"/>
+
+                    <Label Content="Zip Code:" HorizontalAlignment="Left" Margin="11,203,0,0" VerticalAlignment="Top" Height="26" Width="60"/>
+                    <TextBox x:Name="ZipCodeTextBox" HorizontalAlignment="Left" Margin="0,207,0,0" VerticalAlignment="Top" Width="200" Grid.Column="1" Height="18"/>
+
+                    <Label Content="Street:" HorizontalAlignment="Left" Margin="21,233,0,0" VerticalAlignment="Top" Height="26" Width="43"/>
+                    <TextBox x:Name="StreetTextBox" HorizontalAlignment="Left" Margin="0,237,0,0" VerticalAlignment="Top" Width="200" Grid.Column="1" Height="18"/>
+
+                    <Label Content="House Number:" HorizontalAlignment="Left" Margin="6,264,0,0" VerticalAlignment="Top" Height="26" Width="94"/>
+                    <TextBox x:Name="HouseNumberTextBox" HorizontalAlignment="Left" Margin="0,268,0,0" VerticalAlignment="Top" Width="200" Grid.Column="1" Height="18"/>
+
+
+                    <Button Content="Register" HorizontalAlignment="Left" Margin="11,310,0,0" VerticalAlignment="Top" Width="75" Click="RegisterButton_Click" Height="20"/>
+
+                </Grid>
+            </TabItem>
+
+            <!-- Login Tab -->
+            <TabItem Header="Login">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="49*"/>
+                        <ColumnDefinition Width="148*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Username:" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="26" Width="66"/>
+                    <TextBox x:Name="LoginUsernameTextBox" HorizontalAlignment="Left" Margin="3,14,0,0" VerticalAlignment="Top" Width="200" Grid.Column="1" Height="18"/>
+
+                    <Label Content="Password:" HorizontalAlignment="Left" Margin="14,40,0,0" VerticalAlignment="Top" Height="26" Width="62"/>
+                    <PasswordBox x:Name="LoginPasswordBox" HorizontalAlignment="Left" Margin="3,44,0,0" VerticalAlignment="Top" Width="200" Grid.Column="1" Height="18"/>
+
+                    <Button Content="Login" HorizontalAlignment="Center" Margin="0,80,0,0" VerticalAlignment="Top" Width="74" Click="LoginButton_Click" Height="20"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </Window>

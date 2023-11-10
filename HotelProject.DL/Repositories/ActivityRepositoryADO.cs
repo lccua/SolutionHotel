@@ -89,6 +89,7 @@ namespace HotelProject.DL.Repositories
                             );
 
                             Activity activity = new Activity(
+                                (int)reader["ActivityID"],
                                 (string)reader["ActivityName"],
                                 activityInfo,
                                 (string)reader["scheduled_date"],

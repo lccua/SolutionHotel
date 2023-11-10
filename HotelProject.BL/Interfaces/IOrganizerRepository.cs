@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace HotelProject.BL.Interfaces
 {
-    public interface IRegistrationRepository
+    public interface IOrganizerRepository
     {
-        void SaveRegistration(Registration registration);
+        void SaveOrganizer(Organizer newOrganizer);
+        string GetHashedPasswordAndSaltByUsername(string username);
     }
 }

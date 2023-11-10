@@ -8,6 +8,18 @@ namespace HotelProject.BL.Model
 {
     public class Activity
     {
+        public Activity(int id, string name, ActivityInfo activityInfo, string scheduledDate, int availableSpots, decimal adultPrice, decimal childPrice, int discount)
+        {
+            Id = id;
+            Name = name;
+            ActivityInfo = activityInfo;
+            ScheduledDate = scheduledDate;
+            AvailableSpots = availableSpots;
+            AdultPrice = adultPrice;
+            ChildPrice = childPrice;
+            Discount = discount;
+        }
+
         public Activity(string name, ActivityInfo activityInfo, string scheduledDate, int availableSpots, decimal adultPrice, decimal childPrice, int discount)
         {
             Name = name;

@@ -11,11 +11,22 @@ namespace HotelProject.BL.Model
     {
         public Organizer(int organizerId, string name, ContactInfo contactInfo)
         {
+            OrganizerId = organizerId;
             SetName(name);
             ContactInfo = contactInfo;
         }
 
+        public Organizer( string name, ContactInfo contactInfo)
+        {
+
+            SetName(name);
+            ContactInfo = contactInfo;
+        }
+
+        public int OrganizerId { get; set; }    
         public string Name { get; set; }
+        public string Username { get; set; }
+        public string HashedPassword { get; set; }
         public ContactInfo ContactInfo { get; set; }
 
 

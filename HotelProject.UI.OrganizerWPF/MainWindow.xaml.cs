@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -22,6 +23,7 @@ using System.Windows.Shapes;
 
 
 
+
 namespace HotelProject.UI.OrganizerWPF
 {
     /// <summary>
@@ -29,31 +31,78 @@ namespace HotelProject.UI.OrganizerWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ActivityManager activityManager;
-
-        private ObservableCollection<ActivityUI> activitiesUIs = new ObservableCollection<ActivityUI>();
-
+       
+        private OrganizerManager organizerManager;
         public MainWindow()
         {
             InitializeComponent();
-            activityManager = new ActivityManager(RepositoryFactory.ActivityRepository);
+            organizerManager = new OrganizerManager(RepositoryFactory.OrganizerRepository);
 
-            activitiesUIs = new ObservableCollection<ActivityUI>(activityManager.GetActivities(null).Select(x => new ActivityUI(x.Id, x.Name, x.ScheduledDate, x.AvailableSpots, x.AdultPrice, x.ChildPrice, x.Discount, x.ActivityInfo.Desciption, x.ActivityInfo.Duration, x.ActivityInfo.Address.ToString())));
-            ActivityDataGrid.ItemsSource = activitiesUIs;
         }
 
-        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            ActivityDataGrid.ItemsSource = new ObservableCollection<ActivityUI>(activityManager.GetActivities(SearchTextBox.Text).Select(x => new ActivityUI(x.Id, x.Name, x.ScheduledDate, x.AvailableSpots, x.AdultPrice, x.ChildPrice, x.Discount, x.ActivityInfo.Desciption, x.ActivityInfo.Duration, x.ActivityInfo.Address.ToString())));
+            string userName = LoginUsernameTextBox.Text;
+           
+
+            string existingHashedPassword = organizerManager.GetHashedPasswordAndSaltByUsername(userName);
+
+            if (existingHashedPassword != null)
+            {
+                string inputPassword = LoginPasswordBox.Password;
+                bool isAuthenticated = organizerManager.AuthenticateUser(existingHashedPassword, inputPassword);
+
+                if (isAuthenticated)
+                {
+                    // Authentication successful
+                    MessageBox.Show("Authentication successful!", "Success");
+                }
+                else
+                {
+                    // Authentication failed
+                    MessageBox.Show("Authentication failed. Incorrect password or user.", "Error");
+                }
+            }
+            else
+            {
+                // User not found
+                MessageBox.Show("Authentication failed. Incorrect password or user.", "Error");
+            }
+
+
+
+
+
         }
 
-        private void MenuItemAddActivity_Click(object sender, RoutedEventArgs e)
+        private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            ActivityWindow w = new ActivityWindow(null);
 
-            if (w.ShowDialog() == true)
-                activitiesUIs.Add(w.activityUI);
+            string city = CityTextBox.Text;
+            string zipCode = ZipCodeTextBox.Text;
+            string street = StreetTextBox.Text;
+            string houseNumber = HouseNumberTextBox.Text;
+            Address newAddress = new Address(city,zipCode,houseNumber,street);
+
+            string name = NameTextBox.Text;
+            string email = EmailTextBox.Text;
+            string phone = PhoneTextBox.Text;
+            ContactInfo newContactInfo = new ContactInfo(email, phone, newAddress);
+
+
+            string userName = RegisterUsernameTextBox.Text;
+
+            string password = RegisterPasswordBox.Password;
+          
+            string hashedPassword = organizerManager.GenerateHash(password);
+
+            Organizer newOrganizer = new Organizer(name,newContactInfo);
+            newOrganizer.Username = userName;
+            newOrganizer.HashedPassword = hashedPassword;
+
+            organizerManager.SaveOrganizer(newOrganizer);
         }
-       
+
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿DROP TABLE dbo.Organizer;
+DROP TABLE dbo.Registration_Member;
 DROP TABLE dbo.Registration;
 DROP TABLE dbo.Member;
 DROP TABLE dbo.Customer;
@@ -17,6 +18,8 @@ CREATE TABLE Customer (
     status INT NOT NULL
 );
 
+
+
 -- Create the Member table
 CREATE TABLE Member (
     ID INT IDENTITY(1,1) PRIMARY KEY,
@@ -26,6 +29,8 @@ CREATE TABLE Member (
     customer_id INT NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES Customer(ID)
 );
+
+
 
 -- Create the Activity_Info table
 CREATE TABLE Activity_Info
@@ -49,26 +54,42 @@ CREATE TABLE Activity
     activity_info_id INT FOREIGN KEY REFERENCES Activity_Info(ID)
 );
 
--- Create the Organizer table
-CREATE TABLE Organizer
-(
-    ID INT PRIMARY KEY IDENTITY(1,1),
-    name NVARCHAR(255) NOT NULL,
-    email NVARCHAR(255) NOT NULL,
-    phone NVARCHAR(20) NOT NULL,
-    address NVARCHAR(255) NOT NULL,	
-);
-
 -- Create the Registration table
 CREATE TABLE Registration (
     ID INT PRIMARY KEY IDENTITY(1,1),
-    members INT NOT NULL,
     total_price DECIMAL NOT NULL,
     customer_id INT NOT NULL,
     activity_id INT NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES Customer(ID), 
     FOREIGN KEY (activity_id) REFERENCES Activity(ID)  
 );
+
+-- Create the RegistrationMember table
+CREATE TABLE Registration_Member (
+    registration_id INT,
+    member_id INT,
+    PRIMARY KEY (registration_id, member_id),
+
+    FOREIGN KEY (registration_id) REFERENCES Registration(ID),
+    FOREIGN KEY (member_id) REFERENCES Member(ID)
+);
+
+-- Create the Organizer table with username and password
+CREATE TABLE Organizer
+(
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    username NVARCHAR(50) NOT NULL UNIQUE, -- Unique constraint to ensure usernames are unique
+    password_hash NVARCHAR(MAX) NOT NULL,
+    name NVARCHAR(255) NOT NULL,
+    email NVARCHAR(255) NOT NULL,
+    phone NVARCHAR(20) NOT NULL,
+    address NVARCHAR(255) NOT NULL
+);
+
+
+
+
+
 
 -- Dummy data
 

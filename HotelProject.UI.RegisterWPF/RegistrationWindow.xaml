@@ -39,7 +39,7 @@
         </ListBox>
 
         <Label Grid.Row="3" Grid.Column="0" Content="Total Price" Margin="31,7,10,7"/>
-        <TextBox  FontSize="14"  Grid.Row="3" Grid.Column="1" Margin="21,10,20,10"  />
+        <TextBox Name="TotalPriceTextBox"  FontSize="14"  Grid.Row="3" Grid.Column="1" Margin="21,10,20,10"  />
 
 
 

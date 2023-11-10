@@ -24,6 +24,7 @@ namespace HotelProject.UI.RegisterWPF
     {
         private ActivityManager activityManager;
         public List<Activity> activities;
+        public Activity selectedActivity;
         public string selectedActivityName = "";
 
 
@@ -59,7 +60,7 @@ namespace HotelProject.UI.RegisterWPF
 
         private void ActivityComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Activity selectedActivity = (Activity)ActivityComboBox.SelectedItem;
+            selectedActivity = (Activity)ActivityComboBox.SelectedItem;
 
             selectedActivityName = selectedActivity.Name;
 
