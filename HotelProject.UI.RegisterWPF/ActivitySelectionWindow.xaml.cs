@@ -70,7 +70,7 @@ namespace HotelProject.UI.RegisterWPF
             AdultPriceTextBox.Text = selectedActivity.AdultPrice.ToString();
             ChildPriceTextBox.Text = selectedActivity.ChildPrice.ToString();
             DiscountTextBox.Text = selectedActivity.Discount.ToString();
-            DescriptionTextBox.Text = selectedActivity.ActivityInfo.Desciption;
+            DescriptionTextBox.Text = selectedActivity.ActivityInfo.Description;
             DurationTextBox.Text = selectedActivity.ActivityInfo.Duration.ToString();
             ZipCodeTextBox.Text = selectedActivity.ActivityInfo.Address.ZipCode;
             CityTextBox.Text = selectedActivity.ActivityInfo.Address.Municipality;

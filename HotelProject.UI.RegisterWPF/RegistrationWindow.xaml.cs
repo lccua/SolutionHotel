@@ -67,7 +67,7 @@ namespace HotelProject.UI.RegisterWPF
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Close();
         }
 
         private void SelectActivity_button(object sender, RoutedEventArgs e)
@@ -82,7 +82,22 @@ namespace HotelProject.UI.RegisterWPF
             {
                 selectedActivity = activitySelectionWindow.selectedActivity;
                 ActivityNameTextBox.Text = selectedActivity.Name;
+
+                if (selectedMembers is not null)
+                {
+                    totalPrice = 0;
+
+                    totalPrice = registrationManager.CalculateTotalPrice(selectedMembers, selectedActivity);
+
+                    // Display the total price in the TextBox
+                    TotalPriceTextBox.Text = totalPrice.ToString("C"); // Assuming TotalPriceTextBox is the name of your TextBox
+                }
             }
+
+
+
+           
+
 
         }
 
@@ -92,11 +107,18 @@ namespace HotelProject.UI.RegisterWPF
            
             totalPrice = 0;
 
-            totalPrice = registrationManager.CalculateTotalPrice(selectedMembers, selectedActivity);
+            if (selectedActivity == null)
+            {
+                // Exit the function early if selectedActivity is null
+                return;
+            }
+            else
+            {
+                totalPrice = registrationManager.CalculateTotalPrice(selectedMembers, selectedActivity);
 
-            // Display the total price in the TextBox
-            TotalPriceTextBox.Text = totalPrice.ToString("C"); // Assuming TotalPriceTextBox is the name of your TextBox
-
+                // Display the total price in the TextBox
+                TotalPriceTextBox.Text = totalPrice.ToString("C"); // Assuming TotalPriceTextBox is the name of your TextBox
+            }
         }
     }
 }
