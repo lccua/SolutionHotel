@@ -1,4 +1,4 @@
-﻿using HotelProject.BL.Exceptions;
+﻿using HotelProject.BL.Exceptions.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,10 +22,9 @@ namespace HotelProject.BL.Model
             _birthDay = birthDay;
         }
 
-        public Member()
-        {
-            
-        }
+        public Member() {}
+
+        //------------------------------------------------------------------
 
         private int _id;
         public int Id
@@ -43,10 +42,26 @@ namespace HotelProject.BL.Model
             _id = value;
         }
 
+        //------------------------------------------------------------------
 
         private string _name;
-        public string Name { get { return _name; } set { if (string.IsNullOrWhiteSpace(value)) throw new MemberException("name is empty"); _name = value; } }
-        
+        public string Name
+        {
+            get { return _name; }
+            set { ValidateName(value); }
+        }
+
+        private void ValidateName(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new OrganizerException("Name cannot be null or empty");
+            }
+            _name = value;
+        }
+
+        //------------------------------------------------------------------
+
         private DateOnly _birthDay;
         public DateOnly BirthDay 
         { 
@@ -61,16 +76,18 @@ namespace HotelProject.BL.Model
             } 
         }
 
-       /* public override bool Equals(object? obj)
-        {
-            return obj is Member member &&
-                   _name == member._name &&
-                   _birthDay.Equals(member._birthDay);
-        }
+        //------------------------------------------------------------------
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(_name, _birthDay);
-        }*/
+        /* public override bool Equals(object? obj)
+         {
+             return obj is Member member &&
+                    _name == member._name &&
+                    _birthDay.Equals(member._birthDay);
+         }
+
+         public override int GetHashCode()
+         {
+             return HashCode.Combine(_name, _birthDay);
+         }*/
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HotelProject.BL.Exceptions
+namespace HotelProject.BL.Exceptions.Model
 {
     public class AddressException : Exception
     {
