@@ -240,5 +240,43 @@ namespace HotelProject.DL.Repositories
                 }
             }
         }
+
+        public string GetHashedPasswordByUsername(string username)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Use parameterized query to avoid SQL injection
+                string query = "SELECT password_hash FROM Organizer WHERE username = @Username";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Username", username);
+
+                    // Execute the query
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    // Check if a user was found
+                    if (reader.Read())
+                    {
+                        // Retrieve hashed_password and salt from the database
+                        string hashedPassword = (string)reader["password_hash"];
+
+
+
+
+                        return hashedPassword;
+                    }
+                    else
+                    {
+                        // User not found
+                        // Return some default values or throw an exception based on your error handling strategy
+                        return null;
+                    }
+                }
+            }
+        }
+
     }
 }

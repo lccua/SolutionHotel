@@ -10,6 +10,6 @@ namespace HotelProject.BL.Interfaces
     public interface IOrganizerRepository
     {
         void SaveOrganizer(Organizer newOrganizer);
-        string GetHashedPasswordAndSaltByUsername(string username);
+        string GetHashedPasswordByUsername(string username);
     }
 }

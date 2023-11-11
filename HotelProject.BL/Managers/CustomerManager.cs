@@ -79,5 +79,18 @@ namespace HotelProject.BL.Managers
             }
 
         }
+
+        public string GetHashedPasswordByUsername(string username)
+        {
+            try
+            {
+               return _customerRepository.GetHashedPasswordByUsername(username);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

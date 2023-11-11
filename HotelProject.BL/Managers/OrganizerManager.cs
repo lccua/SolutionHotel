@@ -20,25 +20,10 @@ namespace HotelProject.BL.Managers
             _organizerRepository = organizerRepository;
         }
 
-        public string GenerateHash(string password)
-        {
-            // Generate a salt and hash the password
-            string salt = BCrypt.Net.BCrypt.GenerateSalt();
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);
-
-            return hashedPassword;
-        }
+      
 
 
-        public bool AuthenticateUser(string hashedPasswordFromDatabase, string enteredPassword)
-        {
-           
-        
-            // Check if the entered password matches the stored hashed password
-            bool isPasswordCorrect = BCrypt.Net.BCrypt.Verify(enteredPassword, hashedPasswordFromDatabase);
-
-            return isPasswordCorrect;
-        }
+       
 
 
         public void SaveOrganizer(Organizer newOrganizer)
@@ -54,11 +39,11 @@ namespace HotelProject.BL.Managers
             }
         }
 
-        public string GetHashedPasswordAndSaltByUsername(string username)
+        public string GetHashedPasswordByUsername(string username)
         {
             try
             {
-               return _organizerRepository.GetHashedPasswordAndSaltByUsername(username);
+               return _organizerRepository.GetHashedPasswordByUsername(username);
             }
             catch (Exception)
             {

@@ -46,7 +46,7 @@ namespace HotelProject.DL.Repositories
             }
         }
 
-        public string GetHashedPasswordAndSaltByUsername(string username)
+        public string GetHashedPasswordByUsername(string username)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
