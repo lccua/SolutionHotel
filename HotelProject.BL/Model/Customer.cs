@@ -37,6 +37,13 @@ namespace HotelProject.BL.Model
                 throw new CustomerException("removemember");
         }
 
+        public List<Member> GetMembers()
+        {
+            // Returning a copy of the internal list to prevent external modification
+            return new List<Member>(_members);
+        }
+
+
         //------------------------------------------------------------------
 
         private string _name;

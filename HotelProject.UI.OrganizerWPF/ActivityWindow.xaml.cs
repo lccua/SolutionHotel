@@ -57,7 +57,7 @@ namespace HotelProject.UI.OrganizerWPF
             int currentId = activityManager.AddActivity(a);
             a.Id = currentId;
 
-            activityUI = new ActivityUI(a.Id, a.Name, a.ScheduledDate, a.AvailableSpots, a.AdultPrice, a.ChildPrice, a.Discount, a.ActivityInfo.Desciption, a.ActivityInfo.Duration, a.ActivityInfo.Address.ToString());
+            activityUI = new ActivityUI(a.Id, a.Name, a.ScheduledDate, a.AvailableSpots, a.AdultPrice, a.ChildPrice, a.Discount, a.ActivityInfo.Description, a.ActivityInfo.Duration, a.ActivityInfo.Address.ToString());
          
             DialogResult = true;
             Close();
