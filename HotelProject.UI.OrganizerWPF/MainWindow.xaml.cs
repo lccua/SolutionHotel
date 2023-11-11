@@ -58,8 +58,13 @@ namespace HotelProject.UI.OrganizerWPF
 
                 if (isAuthenticated)
                 {
-                    // Authentication successful
-                    MessageBox.Show("Authentication successful!", "Success");
+                    ManagementWindow managementWindow = new ManagementWindow();
+                    managementWindow.Show();
+
+                    // Close the current window
+                    this.Close();
+
+
                 }
                 else
                 {

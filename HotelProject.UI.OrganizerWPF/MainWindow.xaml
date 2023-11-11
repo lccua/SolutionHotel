@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HotelProject.UI.OrganizerWPF"
         mc:Ignorable="d"
-        Title="Login and Registration" Height="400" Width="400">
+        Title="Login and Registration" Height="150" Width="350">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="49*"/>

@@ -29,17 +29,21 @@ namespace OrganizerRegistrationApp
             ContactInfo newContactInfo = new ContactInfo(email, phone, newAddress);
 
 
-            string userName = "organizer";
+            string userName = "luca";
 
-            string password = "organizer";
+            string password = "luca";
 
             string hashedPassword = passwordSecurity.HashPassword(password);
+            Console.WriteLine("Password hashed");
+
 
             Organizer newOrganizer = new Organizer(name, newContactInfo);
             newOrganizer.Username = userName;
             newOrganizer.HashedPassword = hashedPassword;
 
             organizerManager.SaveOrganizer(newOrganizer);
+            Console.WriteLine();
+            Console.WriteLine("Organizer added to database");
         }
     }
 }
