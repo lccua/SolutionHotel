@@ -36,32 +36,62 @@ namespace HotelProject.UI.OrganizerWPF
            
         }
 
-
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            decimal adultPriceParsed = decimal.Parse(AdultPriceTextBox.Text);
-            decimal childPriceParsed = decimal.Parse(ChildPriceTextBox.Text);
-            int discountParsed = int.Parse(DiscountTextBox.Text);
-            int availableSpotsParsed = int.Parse(AvailableSpotsTextBox.Text);
-            int durationParsed = int.Parse(DurationTextBox.Text);
+            try
+            {
+                // Validate and parse input values
+                if (string.IsNullOrWhiteSpace(AdultPriceTextBox.Text) ||
+                    string.IsNullOrWhiteSpace(ChildPriceTextBox.Text) ||
+                    string.IsNullOrWhiteSpace(DiscountTextBox.Text) ||
+                    string.IsNullOrWhiteSpace(AvailableSpotsTextBox.Text) ||
+                    string.IsNullOrWhiteSpace(DurationTextBox.Text) ||
+                    string.IsNullOrWhiteSpace(NameTextBox.Text) ||
+                    SheduledDate.SelectedDate == null)
+                {
+                    throw new ArgumentException("Input fields cannot be empty");
+                }
 
-            DateTime? sheduledDate = SheduledDate.SelectedDate;
-            DateTime? scheduledDate = SheduledDate.SelectedDate;
-            string scheduledDateParsed = scheduledDate.HasValue ? scheduledDate.Value.ToString("yyyy-MM-dd") : string.Empty;
+                // Replace '.' with ',' in price TextBoxes
+                string adultPriceText = AdultPriceTextBox.Text.Replace('.', ',');
+                string childPriceText = ChildPriceTextBox.Text.Replace('.', ',');
 
+                decimal adultPriceParsed = decimal.Parse(adultPriceText);
+                decimal childPriceParsed = decimal.Parse(childPriceText);
+                int discountParsed = int.Parse(DiscountTextBox.Text);
+                int availableSpotsParsed = int.Parse(AvailableSpotsTextBox.Text);
+                int durationParsed = int.Parse(DurationTextBox.Text);
 
+                DateTime? scheduledDate = SheduledDate.SelectedDate;
+                string scheduledDateParsed = scheduledDate.Value.ToString("yyyy-MM-dd");
 
-            Activity a = new Activity(NameTextBox.Text, new ActivityInfo(DescriptionTextBox.Text, new Address(CityTextBox.Text, ZipCodeTextBox.Text, HouseNumberTextBox.Text, StreetTextBox.Text), durationParsed), scheduledDateParsed, availableSpotsParsed, adultPriceParsed, childPriceParsed, discountParsed);
+                // Create Activity object
+                Activity a = new Activity(NameTextBox.Text, new ActivityInfo(DescriptionTextBox.Text, new Address(CityTextBox.Text, ZipCodeTextBox.Text, HouseNumberTextBox.Text, StreetTextBox.Text), durationParsed), scheduledDateParsed, availableSpotsParsed, adultPriceParsed, childPriceParsed, discountParsed);
 
-            
-            int currentId = activityManager.AddActivity(a);
-            a.Id = currentId;
+                // Add the activity
+                int currentId = activityManager.AddActivity(a);
+                a.Id = currentId;
 
-            activityUI = new ActivityUI(a.Id, a.Name, a.ScheduledDate, a.AvailableSpots, a.AdultPrice, a.ChildPrice, a.Discount, a.ActivityInfo.Description, a.ActivityInfo.Duration, a.ActivityInfo.Address.ToString());
-         
-            DialogResult = true;
-            Close();
+                // Create ActivityUI object
+                activityUI = new ActivityUI(a.Id, a.Name, a.ScheduledDate, a.AvailableSpots, a.AdultPrice, a.ChildPrice, a.Discount, a.ActivityInfo.Description, a.ActivityInfo.Duration, a.ActivityInfo.Address.ToString());
+
+                DialogResult = true;
+                Close();
+            }
+            catch (FormatException ex)
+            {
+                MessageBox.Show("Invalid input format. Please enter valid numeric values.");
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred: " + ex.Message);
+            }
         }
+
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
