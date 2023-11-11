@@ -74,51 +74,34 @@ namespace HotelProject.UI.RegisterWPF
         {
             // Create an instance of the new window
             ActivitySelectionWindow activitySelectionWindow = new ActivitySelectionWindow();
-            
-
-
 
             if (activitySelectionWindow.ShowDialog() == true)
             {
                 selectedActivity = activitySelectionWindow.selectedActivity;
                 ActivityNameTextBox.Text = selectedActivity.Name;
-
-                if (selectedMembers is not null)
-                {
-                    totalPrice = 0;
-
-                    totalPrice = registrationManager.CalculateTotalPrice(selectedMembers, selectedActivity);
-
-                    // Display the total price in the TextBox
-                    TotalPriceTextBox.Text = totalPrice.ToString("C"); // Assuming TotalPriceTextBox is the name of your TextBox
-                }
+                UpdateTotalPrice();
             }
-
-
-
-           
-
-
         }
+
 
         private void MembersListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             selectedMembers = MembersListBox.SelectedItems.Cast<Member>().ToList();
-           
-            totalPrice = 0;
+            UpdateTotalPrice();
+        }
 
+        private void UpdateTotalPrice()
+        {
             if (selectedActivity == null)
             {
                 // Exit the function early if selectedActivity is null
                 return;
             }
-            else
-            {
-                totalPrice = registrationManager.CalculateTotalPrice(selectedMembers, selectedActivity);
 
-                // Display the total price in the TextBox
-                TotalPriceTextBox.Text = totalPrice.ToString("C"); // Assuming TotalPriceTextBox is the name of your TextBox
-            }
+            totalPrice = registrationManager.CalculateTotalPrice(selectedMembers, selectedActivity);
+
+            // Display the total price in the TextBox
+            TotalPriceTextBox.Text = totalPrice.ToString("C"); // Assuming TotalPriceTextBox is the name of your TextBox
         }
     }
 }
