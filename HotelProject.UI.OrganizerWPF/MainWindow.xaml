@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HotelProject.UI.OrganizerWPF"
         mc:Ignorable="d"
-        Title="Login and Registration" Height="150" Width="400">
+        Title="Login and Registration" Height="150" Width="350">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="49*"/>
@@ -18,5 +18,6 @@
         <PasswordBox x:Name="LoginPasswordBox" HorizontalAlignment="Left" Margin="3,44,0,0" VerticalAlignment="Top" Width="200" Grid.Column="1" Height="18"/>
 
         <Button Content="Login" HorizontalAlignment="Center" Margin="0,80,0,0" VerticalAlignment="Top" Width="74" Click="LoginButton_Click" Height="20"/>
+            
     </Grid>
 </Window>

@@ -16,8 +16,12 @@ namespace HotelProject.UI.CustomerWPF.Model
             this.email = email;
             this.phone = phone;
             this.address = address;
-            NrOfMembers = nrOfMembers;
+            this.nrOfMembers = nrOfMembers;
         }
+
+      
+
+
 
         private int id;
         public int Id { get { return id; } set { id = value; OnPropertyChanged(); } }
@@ -33,6 +37,9 @@ namespace HotelProject.UI.CustomerWPF.Model
 
         private string address;
         public string Address { get { return address; } set { address = value; OnPropertyChanged(); } }
+
+    
+    
 
         private int nrOfMembers;
         public int NrOfMembers { get { return nrOfMembers; } set { nrOfMembers = value; OnPropertyChanged(); } }

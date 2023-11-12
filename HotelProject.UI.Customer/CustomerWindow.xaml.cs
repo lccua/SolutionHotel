@@ -27,6 +27,8 @@ namespace HotelProject.UI.CustomerWPF
         public CustomerUI customerUI;
         private bool isUpdate;
         public List<Member> members;
+
+        public Member newMember = new Member();
         private List<Customer> customers; // Add this field
 
         private ObservableCollection<MemberUI> membersUIs = new ObservableCollection<MemberUI>();
@@ -56,6 +58,8 @@ namespace HotelProject.UI.CustomerWPF
             {
                 members = customers.Find(cust => cust.Id == customerUI.Id)?.GetMembers();
 
+                c.Members = members;
+
                 membersUIs = new ObservableCollection<MemberUI>(members.Select(x => new MemberUI(x.Id, x.Name, x.BirthDay)));
                 MemberDataGrid.ItemsSource = membersUIs;
 
@@ -63,7 +67,6 @@ namespace HotelProject.UI.CustomerWPF
                 NameTextBox.Text = customerUI.Name;
                 EmailTextBox.Text = customerUI.Email;
                 PhoneTextBox.Text = customerUI.Phone;
-                ZipTextBox.Text = customerUI.Address;
 
                
 
@@ -72,13 +75,29 @@ namespace HotelProject.UI.CustomerWPF
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
+            // Check if any of the textboxes is empty
+            if (string.IsNullOrWhiteSpace(NameTextBox.Text) ||
+                string.IsNullOrWhiteSpace(EmailTextBox.Text) ||
+                string.IsNullOrWhiteSpace(PhoneTextBox.Text) ||
+                string.IsNullOrWhiteSpace(CityTextBox.Text) ||
+                string.IsNullOrWhiteSpace(ZipTextBox.Text) ||
+                string.IsNullOrWhiteSpace(HouseNumberTextBox.Text) ||
+                string.IsNullOrWhiteSpace(StreetTextBox.Text))
+            {
+                MessageBox.Show("Please fill in all the fields.", "Incomplete Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return; // Stop processing further if any field is empty
+            }
+
+
             if (isUpdate)
             {
                 
                 c.Name = NameTextBox.Text;
                 c.ContactInfo = new ContactInfo(EmailTextBox.Text, PhoneTextBox.Text, new Address(CityTextBox.Text, ZipTextBox.Text, HouseNumberTextBox.Text, StreetTextBox.Text));
 
-                
+
+              
+            
                 customerManager.UpdateCustomer(c, customerUI.Id);
 
 
@@ -116,7 +135,11 @@ namespace HotelProject.UI.CustomerWPF
             if (w.ShowDialog() == true)
             {
                 membersUIs.Add(w.memberUI);
-                Member newMember = new Member(w.memberUI.Name, w.memberUI.Birthday);
+
+                newMember.Name = w.memberUI.Name;
+                newMember.BirthDay = w.memberUI.Birthday;
+                
+
                 c.AddMember(newMember);
 
                 // Update the MemberDataGrid with the new member

@@ -1,4 +1,4 @@
-﻿using HotelProject.BL.Exceptions;
+﻿using HotelProject.BL.Exceptions.Manager;
 using HotelProject.BL.Interfaces;
 using HotelProject.BL.Model;
 using System;

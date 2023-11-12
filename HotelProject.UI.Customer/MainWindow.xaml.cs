@@ -75,7 +75,9 @@ namespace HotelProject.UI.CustomerWPF
             if (CustomerDataGrid.SelectedItem == null) MessageBox.Show("Customer not selected","Update");
             else
             {
-                CustomerWindow w = new CustomerWindow(true,(CustomerUI)CustomerDataGrid.SelectedItem, customers);
+                CustomerUI selectedCustomer = (CustomerUI)CustomerDataGrid.SelectedItem;
+
+                CustomerWindow w = new CustomerWindow(true, selectedCustomer, customers);
                 w.ShowDialog();
             }
         }

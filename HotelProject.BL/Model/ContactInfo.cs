@@ -1,9 +1,4 @@
-﻿using HotelProject.BL.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HotelProject.BL.Exceptions.Model;
 
 namespace HotelProject.BL.Model
 {
@@ -15,11 +10,58 @@ namespace HotelProject.BL.Model
             Phone = phone;
             Address = address;
         }
+
+        //------------------------------------------------------------------
+
         private string _email;
-        public string Email { get { return _email; } set { if (string.IsNullOrEmpty(value) || !value.Contains('@')) throw new ContactInfoException("email is empty"); _email = value; } }
+        public string Email
+        {
+            get { return _email; }
+            set { ValidateEmail(value); _email = value; }
+        }
+
+        private void ValidateEmail(string value)
+        {
+            if (string.IsNullOrEmpty(value) || !value.Contains('@'))
+            {
+                throw new ContactInfoException("Email is empty or invalid");
+            }
+        }
+
+        //------------------------------------------------------------------
+
         private string _phone;
-        public string Phone { get { return _phone; } set { if (string.IsNullOrWhiteSpace(value)) throw new ContactInfoException("phone is empty"); _phone = value; } }
+        public string Phone
+        {
+            get { return _phone; }
+            set { ValidatePhone(value); _phone = value; }
+        }
+
+        private void ValidatePhone(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new ContactInfoException("Phone is empty");
+            }
+        }
+
+        //------------------------------------------------------------------
+
         private Address _address;
-        public Address Address { get { return _address; } set { if (value == null) throw new ContactInfoException("address is null"); _address = value; } }
+        public Address Address
+        {
+            get { return _address; }
+            set { ValidateAddress(value); _address = value; }
+        }
+
+        private void ValidateAddress(Address value)
+        {
+            if (value == null)
+            {
+                throw new ContactInfoException("Address is null");
+            }
+        }
+
+        //------------------------------------------------------------------
     }
 }

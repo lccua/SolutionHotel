@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HotelProject.UI.OrganizerWPF"
         mc:Ignorable="d"
-        Title="ActivityWindow" Height="325
+        Title="ActivityWindow" Height="300
         " Width="800">
 
     <Grid>
@@ -15,8 +15,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto"  />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="44" />
             <RowDefinition/>
 
         </Grid.RowDefinitions>
@@ -26,34 +25,32 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.Column="0" Content="Id" Margin="5,5,5,5"/>
         <Label Grid.Row="0" Grid.Column="2" Content="Description" Margin="5,5,5,5"/>
-        <Label Grid.Row="1" Grid.Column="0" Content="Name" Margin="5,5,5,5"/>
+        <Label Grid.Row="0" Grid.Column="0" Content="Name" Margin="5,5,5,5"/>
         <Label Grid.Row="1" Grid.Column="2" Content="Duration (hours)" Margin="5,5,5,5"/>
-        <Label Grid.Row="2" Grid.Column="0" Content="Sheduled Date" Margin="5,5,5,5"/>
+        <Label Grid.Row="1" Grid.Column="0" Content="Sheduled Date" Margin="5,5,5,5"/>
         <Label Grid.Row="2" Grid.Column="2" Content="City" Margin="5,5,5,5"/>
-        <Label Grid.Row="3" Grid.Column="0" Content="Available Spots" Margin="5,5,5,5"/>
+        <Label Grid.Row="2" Grid.Column="0" Content="Available Spots" Margin="5,5,5,5"/>
         <Label Grid.Row="3" Grid.Column="2" Content="Zip Code" Margin="5,5,5,5"/>
-        <Label Grid.Row="4" Grid.Column="0" Content="Adult Price" Margin="5,5,5,5"/>
+        <Label Grid.Row="3" Grid.Column="0" Content="Adult Price" Margin="5,5,5,5"/>
         <Label Grid.Row="4" Grid.Column="2" Content="Street" Margin="5,5,5,5"/>
-        <Label Grid.Row="5" Grid.Column="0" Content="Child Price" Margin="5,5,5,5"/>
-        <Label Grid.Row="5" Grid.Column="2" Content="House Number" Margin="5,5,5,5"/>
-        <Label Grid.Row="6" Grid.Column="0" Content="Discount (%)" Margin="5,5,5,5"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Name="IdTextBox" Margin="5,5,5,5" IsReadOnly="True" />
+        <Label Grid.Row="4" Grid.Column="0" Content="Child Price" Margin="5,5,5,5"/>
+        <Label Grid.Row="5" Grid.Column="2" Content="House Number" Margin="5,5,5,10"/>
+        <Label Grid.Row="5" Grid.Column="0" Content="Discount (%)" Margin="5,5,5,10"/>
         <TextBox Grid.Row="0" Grid.Column="3" Name="DescriptionTextBox" Margin="5,5,5,5"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Name="NameTextBox" Margin="5,5,5,5"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Name="NameTextBox" Margin="5,5,5,5"/>
         <TextBox Grid.Row="1" Grid.Column="3" Name="DurationTextBox" Margin="5,5,5,5"/>
         <TextBox Grid.Row="2" Grid.Column="3" Name="CityTextBox" Margin="5,5,5,5"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Name="AvailableSpotsTextBox" Margin="5,5,5,5"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Name="AvailableSpotsTextBox" Margin="5,5,5,5"/>
         <TextBox Grid.Row="3" Grid.Column="3" Name="ZipCodeTextBox" Margin="5,5,5,5"/>
-        <TextBox Grid.Row="4" Grid.Column="1" Name="AdultPriceTextBox" Margin="5,5,5,5"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Name="AdultPriceTextBox" Margin="5,5,5,5"/>
         <TextBox Grid.Row="4" Grid.Column="3" Name="StreetTextBox" Margin="5,5,5,5"/>
-        <TextBox Grid.Row="5" Grid.Column="1" Name="ChildPriceTextBox" Margin="5,5,5,5"/>
-        <TextBox Grid.Row="5" Grid.Column="3" Name="HouseNumberTextBox" Margin="5,5,5,5"/>
-        <TextBox Grid.Row="6" Grid.Column="1" Name="DiscountTextBox" Margin="5,5,5,5"/>
-        <Button Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Name="CancelButton" Content="Cancel" Click="CancelButton_Click"/>
-        <Button Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" Margin="5" Name="AddButton" Content="Add" Click="AddButton_Click"/>
-        <DatePicker Name="SheduledDate" Grid.Row="2" Grid.Column="1" Margin="5,5,5,5"/>
+        <TextBox Grid.Row="4" Grid.Column="1" Name="ChildPriceTextBox" Margin="5,5,5,5"/>
+        <TextBox Grid.Row="5" Grid.Column="3" Name="HouseNumberTextBox" Margin="5,5,5,10"/>
+        <TextBox Grid.Row="5" Grid.Column="1" Name="DiscountTextBox" Margin="5,5,5,10"/>
+        <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,5,5,5" Name="CancelButton" Content="Cancel" Click="CancelButton_Click"/>
+        <Button Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2" Margin="5,5,5,5" Name="AddButton" Content="Add" Click="AddButton_Click"/>
+        <DatePicker Name="SheduledDate" Grid.Row="1" Grid.Column="1" Margin="5,5,5,5"/>
 
     </Grid>
 </Window>

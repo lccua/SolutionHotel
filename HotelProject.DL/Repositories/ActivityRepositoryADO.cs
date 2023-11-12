@@ -130,7 +130,7 @@ namespace HotelProject.DL.Repositories
                         cmd.CommandText = SQL;
                         cmd.Transaction = transaction;
 
-                        cmd.Parameters.AddWithValue("@Description", activity.ActivityInfo.Desciption);
+                        cmd.Parameters.AddWithValue("@Description", activity.ActivityInfo.Description);
                         cmd.Parameters.AddWithValue("@Address", activity.ActivityInfo.Address.ToAddressLine());
                         cmd.Parameters.AddWithValue("@Duration", activity.ActivityInfo.Duration.ToString());
 

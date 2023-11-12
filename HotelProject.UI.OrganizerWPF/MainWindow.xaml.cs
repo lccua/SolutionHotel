@@ -35,11 +35,11 @@ namespace HotelProject.UI.OrganizerWPF
        
         private OrganizerManager organizerManager;
         private PasswordSecurity passwordSecurity;
+
         public MainWindow()
         {
             InitializeComponent();
             organizerManager = new OrganizerManager(RepositoryFactory.OrganizerRepository);
-            passwordSecurity= new PasswordSecurity();
 
 
         }
@@ -58,8 +58,8 @@ namespace HotelProject.UI.OrganizerWPF
 
                 if (isAuthenticated)
                 {
-                    ManagementWindow managementWindow = new ManagementWindow();
-                    managementWindow.Show();
+                    // Authentication successful
+                    MessageBox.Show("Authentication successful!", "Success");
                 }
                 else
                 {
@@ -73,13 +73,8 @@ namespace HotelProject.UI.OrganizerWPF
                 MessageBox.Show("Authentication failed. Incorrect password or user.", "Error");
             }
 
-
-
-
-
         }
 
-    
 
     }
 }

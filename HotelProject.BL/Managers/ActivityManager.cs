@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HotelProject.BL.Model;
-using HotelProject.BL.Exceptions;
+using HotelProject.BL.Exceptions.Manager;
 
 namespace HotelProject.BL.Managers
 {
