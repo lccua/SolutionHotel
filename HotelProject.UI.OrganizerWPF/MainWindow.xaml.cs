@@ -1,5 +1,6 @@
 ﻿using HotelProject.BL.Managers;
 using HotelProject.BL.Model;
+using HotelProject.BL.Security;
 using HotelProject.DL.Repositories;
 using HotelProject.UI.OrganizerWPF.Model;
 using HotelProject.Util;
@@ -33,10 +34,13 @@ namespace HotelProject.UI.OrganizerWPF
     {
        
         private OrganizerManager organizerManager;
+        private PasswordSecurity passwordSecurity;
         public MainWindow()
         {
             InitializeComponent();
             organizerManager = new OrganizerManager(RepositoryFactory.OrganizerRepository);
+            passwordSecurity= new PasswordSecurity();
+
 
         }
 
@@ -45,17 +49,17 @@ namespace HotelProject.UI.OrganizerWPF
             string userName = LoginUsernameTextBox.Text;
            
 
-            string existingHashedPassword = organizerManager.GetHashedPasswordAndSaltByUsername(userName);
+            string existingHashedPassword = organizerManager.GetHashedPasswordByUsername(userName);
 
             if (existingHashedPassword != null)
             {
                 string inputPassword = LoginPasswordBox.Password;
-                bool isAuthenticated = organizerManager.AuthenticateUser(existingHashedPassword, inputPassword);
+                bool isAuthenticated = passwordSecurity.VerifyPassword(existingHashedPassword, inputPassword);
 
                 if (isAuthenticated)
                 {
-                    // Authentication successful
-                    MessageBox.Show("Authentication successful!", "Success");
+                    ManagementWindow managementWindow = new ManagementWindow();
+                    managementWindow.Show();
                 }
                 else
                 {
@@ -75,34 +79,7 @@ namespace HotelProject.UI.OrganizerWPF
 
         }
 
-        private void RegisterButton_Click(object sender, RoutedEventArgs e)
-        {
-
-            string city = CityTextBox.Text;
-            string zipCode = ZipCodeTextBox.Text;
-            string street = StreetTextBox.Text;
-            string houseNumber = HouseNumberTextBox.Text;
-            Address newAddress = new Address(city,zipCode,houseNumber,street);
-
-            string name = NameTextBox.Text;
-            string email = EmailTextBox.Text;
-            string phone = PhoneTextBox.Text;
-            ContactInfo newContactInfo = new ContactInfo(email, phone, newAddress);
-
-
-            string userName = RegisterUsernameTextBox.Text;
-
-            string password = RegisterPasswordBox.Password;
-          
-            string hashedPassword = organizerManager.GenerateHash(password);
-
-            Organizer newOrganizer = new Organizer(name,newContactInfo);
-            newOrganizer.Username = userName;
-            newOrganizer.HashedPassword = hashedPassword;
-
-            organizerManager.SaveOrganizer(newOrganizer);
-        }
-
+    
 
     }
 }

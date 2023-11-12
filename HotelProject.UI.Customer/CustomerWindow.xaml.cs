@@ -63,6 +63,7 @@ namespace HotelProject.UI.CustomerWPF
                 NameTextBox.Text = customerUI.Name;
                 EmailTextBox.Text = customerUI.Email;
                 PhoneTextBox.Text = customerUI.Phone;
+                ZipTextBox.Text = customerUI.Address;
 
                
 
@@ -126,12 +127,19 @@ namespace HotelProject.UI.CustomerWPF
 
         private void MenuItemDeleteMember_Click(object sender, RoutedEventArgs e)
         {
-            MemberUI selectedMember = (MemberUI)MemberDataGrid.SelectedItem;
+            if (MemberDataGrid.SelectedItem == null) MessageBox.Show("Member not selected", "Delete");
 
-            int memberId = selectedMember.Id;
-            customerManager.DeleteMember(memberId);
+            else
+            {
+                MemberUI selectedMember = (MemberUI)MemberDataGrid.SelectedItem;
 
-            membersUIs.Remove(selectedMember);
+                int memberId = selectedMember.Id;
+                customerManager.DeleteMember(memberId);
+
+                membersUIs.Remove(selectedMember);
+            }
+
+           
         }
 
 
