@@ -24,9 +24,14 @@ namespace HotelProject.UI.CustomerWPF
     /// </summary>
     public partial class CustomerWindow : Window
     {
-        public CustomerUI customerUI;
-        private bool isUpdate;
-        public List<Member> members;
+        public CustomerUI selectedCustomerUI;
+
+        private bool IsUpdate => selectedCustomerUI != null;
+
+
+
+       
+        public List<Member> selectedCustomerMemberList;
 
         public Member newMember = new Member();
         private List<Customer> customers; // Add this field
@@ -37,36 +42,35 @@ namespace HotelProject.UI.CustomerWPF
 
 
         private CustomerManager customerManager;
-        public CustomerWindow(bool isUpdate, CustomerUI customerUI, List<Customer> customers)
+        public CustomerWindow(CustomerUI selectedCustomerUI, List<Customer> customers)
         {
             InitializeComponent();
             customerManager = new CustomerManager(RepositoryFactory.CustomerRepository);
 
             this.customers = customers; // Store the customers list locally
 
-            
-
-            this.customerUI = customerUI;
-            this.isUpdate = isUpdate;
+            this.selectedCustomerUI = selectedCustomerUI;
+      
 
            
          
 
            
 
-            if (customerUI != null )
+            if (IsUpdate)
             {
-                members = customers.Find(cust => cust.Id == customerUI.Id)?.GetMembers();
+              
+                selectedCustomerMemberList = selectedCustomerUI.MembersList;
 
-                c.Members = members;
-
-                membersUIs = new ObservableCollection<MemberUI>(members.Select(x => new MemberUI(x.Id, x.Name, x.BirthDay)));
+                membersUIs = new ObservableCollection<MemberUI>(selectedCustomerMemberList.Select(x => new MemberUI(x.Id, x.Name, x.BirthDay)));
                 MemberDataGrid.ItemsSource = membersUIs;
 
-                IdTextBox.Text = customerUI.Id.ToString();
-                NameTextBox.Text = customerUI.Name;
-                EmailTextBox.Text = customerUI.Email;
-                PhoneTextBox.Text = customerUI.Phone;
+                selectedCustomerMemberList.Clear();
+
+                IdTextBox.Text = selectedCustomerUI.Id.ToString();
+                NameTextBox.Text = selectedCustomerUI.Name;
+                EmailTextBox.Text = selectedCustomerUI.Email;
+                PhoneTextBox.Text = selectedCustomerUI.Phone;
 
                
 
@@ -89,20 +93,25 @@ namespace HotelProject.UI.CustomerWPF
             }
 
 
-            if (isUpdate)
+            if (IsUpdate)
             {
                 
                 c.Name = NameTextBox.Text;
+                c.Id = int.Parse(IdTextBox.Text);
+
                 c.ContactInfo = new ContactInfo(EmailTextBox.Text, PhoneTextBox.Text, new Address(CityTextBox.Text, ZipTextBox.Text, HouseNumberTextBox.Text, StreetTextBox.Text));
 
-
+                
               
             
-                customerManager.UpdateCustomer(c, customerUI.Id);
+                customerManager.UpdateCustomer(c, selectedCustomerUI.Id);
 
+                selectedCustomerMemberList =  MemberDataGrid.ItemsSource.Cast<MemberUI>()
+                                               .Select(x => new Member(x.Id,x.Name,x.Birthday))
+                                               .ToList();
 
-                customerUI = new CustomerUI(c.Id, c.Name, c.ContactInfo.Email, c.ContactInfo.Phone, c.ContactInfo.Address.ToString(), c.GetMembers().Count);
-                customers.Add(c);
+                selectedCustomerUI = new CustomerUI(c.Id, c.Name, c.ContactInfo.Email, c.ContactInfo.Phone, c.ContactInfo.Address.ToString(), membersUIs.Count());
+                selectedCustomerUI.MembersList = selectedCustomerMemberList;
 
             }
             else
@@ -113,7 +122,7 @@ namespace HotelProject.UI.CustomerWPF
                 int currentId = customerManager.AddCustomer(c);
                 c.Id = currentId;
 
-                customerUI = new CustomerUI(c.Id, c.Name, c.ContactInfo.Email, c.ContactInfo.Phone, c.ContactInfo.Address.ToString(), c.GetMembers().Count);
+                selectedCustomerUI = new CustomerUI(c.Id, c.Name, c.ContactInfo.Email, c.ContactInfo.Phone, c.ContactInfo.Address.ToString(), c.GetMembers().Count);
                 customers.Add(c);
             }
         
@@ -130,7 +139,7 @@ namespace HotelProject.UI.CustomerWPF
 
         private void MenuItemAddMember_Click(object sender, RoutedEventArgs e)
         {
-            MemberWindow w = new MemberWindow(customerUI);
+            MemberWindow w = new MemberWindow(selectedCustomerUI);
 
             if (w.ShowDialog() == true)
             {
@@ -139,11 +148,14 @@ namespace HotelProject.UI.CustomerWPF
                 newMember.Name = w.memberUI.Name;
                 newMember.BirthDay = w.memberUI.Birthday;
                 
+                selectedCustomerUI.MembersList.Add(newMember);
 
-                c.AddMember(newMember);
+                
 
                 // Update the MemberDataGrid with the new member
                 MemberDataGrid.ItemsSource = membersUIs;
+
+                c.AddMember(newMember);
             }
                
         }

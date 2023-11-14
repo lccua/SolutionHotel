@@ -3,6 +3,7 @@ using HotelProject.BL.Model;
 using HotelProject.DL.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -204,33 +205,44 @@ namespace HotelProject.DL.Repositories
 
         public void UpdateCustomer(Customer customer, int id)
         {
-            string sql = "UPDATE Customer SET name = @Name, email = @Email, phone = @Phone, address = @Address WHERE ID = @CustomerId";
+            string updateSQL = "UPDATE Customer SET name = @Name, email = @Email, phone = @Phone, address = @Address WHERE ID = @CustomerId";
+            string insertSQL = "INSERT INTO member(name,birthday,customer_id,status) VALUES(@name,@birthday,@customerid,@status)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                SqlTransaction transaction = connection.BeginTransaction();
 
-                using (SqlCommand command = new SqlCommand(sql, connection, transaction))
+                using (SqlTransaction transaction = connection.BeginTransaction())
                 {
                     try
                     {
-                        command.Parameters.AddWithValue("@CustomerId", id);
-                        command.Parameters.AddWithValue("@Name", customer.Name);
-                        command.Parameters.AddWithValue("@Email", customer.ContactInfo.Email);
-                        command.Parameters.AddWithValue("@Phone", customer.ContactInfo.Phone);
-                        command.Parameters.AddWithValue("@Address", customer.ContactInfo.Address.ToAddressLine());
-
-                        int rowsAffected = command.ExecuteNonQuery(); // Execute the SQL command to update the customer.
-
-                        if (rowsAffected > 0)
+                        // Update operation
+                        using (SqlCommand updateCommand = new SqlCommand(updateSQL, connection, transaction))
                         {
-                            transaction.Commit();
+                            updateCommand.Parameters.AddWithValue("@CustomerId", id);
+                            updateCommand.Parameters.AddWithValue("@Name", customer.Name);
+                            updateCommand.Parameters.AddWithValue("@Email", customer.ContactInfo.Email);
+                            updateCommand.Parameters.AddWithValue("@Phone", customer.ContactInfo.Phone);
+                            updateCommand.Parameters.AddWithValue("@Address", customer.ContactInfo.Address.ToAddressLine());
+
+                            updateCommand.ExecuteNonQuery();
                         }
-                        else
+
+                        // Insert operation
+                        using (SqlCommand insertCommand = new SqlCommand(insertSQL, connection, transaction))
                         {
-                            transaction.Rollback(); // Rollback the transaction if no rows were updated (customer not found).
+                            foreach (Member member in customer.GetMembers())
+                            {
+                                insertCommand.Parameters.Clear();
+                                insertCommand.Parameters.AddWithValue("@name", member.Name);
+                                insertCommand.Parameters.AddWithValue("@birthday", member.BirthDay.ToDateTime(TimeOnly.MinValue));
+                                insertCommand.Parameters.AddWithValue("@customerid", id);
+                                insertCommand.Parameters.AddWithValue("@status", 1);
+                                insertCommand.ExecuteNonQuery();
+                            }
                         }
+
+                        transaction.Commit(); // Commit the transaction if both update and insert operations succeed
                     }
                     catch (Exception)
                     {
@@ -240,6 +252,8 @@ namespace HotelProject.DL.Repositories
                 }
             }
         }
+
+
 
         public string GetHashedPasswordByUsername(string username)
         {

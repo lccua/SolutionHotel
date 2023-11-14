@@ -31,6 +31,8 @@ namespace HotelProject.UI.CustomerWPF
 
         public List<Customer> customers;
 
+        public CustomerUI selectedCustomer;
+
         private ObservableCollection<CustomerUI> customersUIs=new ObservableCollection<CustomerUI>();
 
         public MainWindow()
@@ -39,8 +41,17 @@ namespace HotelProject.UI.CustomerWPF
             customerManager = new CustomerManager(RepositoryFactory.CustomerRepository);
             customers =  customerManager.GetCustomers(null);
 
-            customersUIs = new ObservableCollection<CustomerUI>(customers.Select(x => new CustomerUI(x.Id, x.Name, x.ContactInfo.Email, x.ContactInfo.Phone, x.ContactInfo.Address.ToString(), x.GetMembers().Count)));
-            
+            customersUIs = new ObservableCollection<CustomerUI>(customers.Select(x =>
+            {
+                var customerUI = new CustomerUI(x.Id, x.Name, x.ContactInfo.Email, x.ContactInfo.Phone, x.ContactInfo.Address.ToString(), x.GetMembers().Count);
+
+                // Populate MembersList
+                customerUI.MembersList = x.GetMembers();
+
+                return customerUI;
+            }));
+
+
             CustomerDataGrid.ItemsSource = customersUIs;
         }
 
@@ -52,9 +63,9 @@ namespace HotelProject.UI.CustomerWPF
         private void MenuItemAddCustomer_Click(object sender, RoutedEventArgs e)
         {
 
-            CustomerWindow w = new CustomerWindow(false, null, customers);
+            CustomerWindow w = new CustomerWindow(null, customers);
             if (w.ShowDialog()==true)
-                customersUIs.Add(w.customerUI);
+                customersUIs.Add(w.selectedCustomerUI);
         }
 
         private void MenuItemDeleteCustomer_Click(object sender, RoutedEventArgs e)
@@ -72,16 +83,22 @@ namespace HotelProject.UI.CustomerWPF
 
         private void MenuItemUpdateCustomer_Click(object sender, RoutedEventArgs e)
         {
-            if (CustomerDataGrid.SelectedItem == null) MessageBox.Show("Customer not selected","Update");
+            if (CustomerDataGrid.SelectedItem == null) MessageBox.Show("Customer not selected", "Update");
             else
             {
-                CustomerUI selectedCustomer = (CustomerUI)CustomerDataGrid.SelectedItem;
+                int selectedIndex = CustomerDataGrid.SelectedIndex;
+                selectedCustomer = (CustomerUI)CustomerDataGrid.SelectedItem;
 
-                CustomerWindow w = new CustomerWindow(true, selectedCustomer, customers);
-                w.ShowDialog();
+                
+                CustomerWindow w = new CustomerWindow(selectedCustomer, customers);
+                if (w.ShowDialog() == true)
+                {
+                    customersUIs[selectedIndex] = w.selectedCustomerUI;
+                    // Refresh the DataGrid
+                    CustomerDataGrid.ItemsSource = customersUIs;
+                }
             }
         }
 
-      
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HotelProject.BL.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace HotelProject.UI.CustomerWPF.Model
 {
     public class CustomerUI : INotifyPropertyChanged
     {
+        
+
         public CustomerUI(int id, string name, string email, string phone, string address, int nrOfMembers)
         {
             this.id = id;
@@ -19,7 +22,6 @@ namespace HotelProject.UI.CustomerWPF.Model
             this.nrOfMembers = nrOfMembers;
         }
 
-      
 
 
 
@@ -38,8 +40,9 @@ namespace HotelProject.UI.CustomerWPF.Model
         private string address;
         public string Address { get { return address; } set { address = value; OnPropertyChanged(); } }
 
-    
-    
+
+        private List<Member> membersList;
+        public List<Member> MembersList { get { return membersList; } set { membersList = value; OnPropertyChanged(); } }
 
         private int nrOfMembers;
         public int NrOfMembers { get { return nrOfMembers; } set { nrOfMembers = value; OnPropertyChanged(); } }

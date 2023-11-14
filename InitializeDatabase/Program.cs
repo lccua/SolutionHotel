@@ -6,7 +6,8 @@ class Program
 {
     static void Main()
     {
-        string connectionString = "Data Source=LAPTOP-CRDVREFU\\SQLEXPRESS;Initial Catalog=VideoShoppingDB;Integrated Security=True;TrustServerCertificate=True;"
+        string connectionString = "Data Source=LAPTOP-CRDVREFU\\SQLEXPRESS;Initial Catalog=HotelDB;Integrated Security=True;TrustServerCertificate=True"
+
 ;
         string scriptFilePath = "C:\\Users\\lucac\\Downloads\\SolutionHotelWoensdag-master\\SolutionHotelWoensdag-master\\HotelProject.DL\\SQL\\CREATE_TABLES.sql"; 
         try
