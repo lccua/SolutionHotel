@@ -5,6 +5,7 @@ using HotelProject.Util;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,13 +25,12 @@ namespace HotelProject.UI.CustomerWPF
     /// </summary>
     public partial class CustomerWindow : Window
     {
-        public CustomerUI selectedCustomerUI;
 
+        private CustomerManager customerManager;
         private bool IsUpdate => selectedCustomerUI != null;
 
+        public CustomerUI selectedCustomerUI;
 
-
-       
         public List<Member> selectedCustomerMemberList;
 
         public Member newMember = new Member();
@@ -41,7 +41,10 @@ namespace HotelProject.UI.CustomerWPF
         private Customer c = new Customer();
 
 
-        private CustomerManager customerManager;
+        
+
+        #region Initialization and Setup
+
         public CustomerWindow(CustomerUI selectedCustomerUI, List<Customer> customers)
         {
             InitializeComponent();
@@ -51,12 +54,6 @@ namespace HotelProject.UI.CustomerWPF
 
             this.selectedCustomerUI = selectedCustomerUI;
       
-
-           
-         
-
-           
-
             if (IsUpdate)
             {
               
@@ -77,65 +74,39 @@ namespace HotelProject.UI.CustomerWPF
             }
         }
 
+        #endregion
+
+        #region Customer Add Button
+
+        private bool IsAnyFieldEmpty() => new[] { NameTextBox, EmailTextBox, PhoneTextBox, CityTextBox, ZipTextBox, HouseNumberTextBox, StreetTextBox }.Any(tb => string.IsNullOrWhiteSpace(tb.Text));
+
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            // Check if any of the textboxes is empty
-            if (string.IsNullOrWhiteSpace(NameTextBox.Text) ||
-                string.IsNullOrWhiteSpace(EmailTextBox.Text) ||
-                string.IsNullOrWhiteSpace(PhoneTextBox.Text) ||
-                string.IsNullOrWhiteSpace(CityTextBox.Text) ||
-                string.IsNullOrWhiteSpace(ZipTextBox.Text) ||
-                string.IsNullOrWhiteSpace(HouseNumberTextBox.Text) ||
-                string.IsNullOrWhiteSpace(StreetTextBox.Text))
-            {
-                MessageBox.Show("Please fill in all the fields.", "Incomplete Information", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return; // Stop processing further if any field is empty
-            }
+            // Check if any of the textboxes is empty, if so show message box and stop further processing
+            if (IsAnyFieldEmpty()) { MessageBox.Show("Please fill in all the fields.", "Incomplete Information", 
+                                     MessageBoxButton.OK, MessageBoxImage.Warning);
+                                     return; }
 
+            if (IsUpdate) { UpdateNewCustomer(); }
 
-            if (IsUpdate)
-            {
-                
-                c.Name = NameTextBox.Text;
-                c.Id = int.Parse(IdTextBox.Text);
-
-                c.ContactInfo = new ContactInfo(EmailTextBox.Text, PhoneTextBox.Text, new Address(CityTextBox.Text, ZipTextBox.Text, HouseNumberTextBox.Text, StreetTextBox.Text));
-
-                
-              
-            
-                customerManager.UpdateCustomer(c, selectedCustomerUI.Id);
-
-                selectedCustomerMemberList =  MemberDataGrid.ItemsSource.Cast<MemberUI>()
-                                               .Select(x => new Member(x.Id,x.Name,x.Birthday))
-                                               .ToList();
-
-                selectedCustomerUI = new CustomerUI(c.Id, c.Name, c.ContactInfo.Email, c.ContactInfo.Phone, c.ContactInfo.Address.ToString(), membersUIs.Count());
-                selectedCustomerUI.MembersList = selectedCustomerMemberList;
-
-            }
-            else
-            {
-                c.Name = NameTextBox.Text;
-                c.ContactInfo = new ContactInfo(EmailTextBox.Text, PhoneTextBox.Text, new Address(CityTextBox.Text, ZipTextBox.Text, HouseNumberTextBox.Text, StreetTextBox.Text));
-
-                int currentId = customerManager.AddCustomer(c);
-                c.Id = currentId;
-
-                selectedCustomerUI = new CustomerUI(c.Id, c.Name, c.ContactInfo.Email, c.ContactInfo.Phone, c.ContactInfo.Address.ToString(), c.GetMembers().Count);
-                customers.Add(c);
-            }
+            else { AddNewCustomer(); }
         
             DialogResult = true;
             Close();
         }
 
-       
+        #endregion
+
+        #region Customer Window Cancel Button
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
+
+        #endregion
+
+        #region Menu Add and Delete Member Buttons
 
         private void MenuItemAddMember_Click(object sender, RoutedEventArgs e)
         {
@@ -177,6 +148,43 @@ namespace HotelProject.UI.CustomerWPF
            
         }
 
+        #endregion
+
+        #region Customer Update and Addition Methods
+
+        private void UpdateNewCustomer()
+        {
+            c.Name = NameTextBox.Text;
+            c.Id = int.Parse(IdTextBox.Text);
+
+            c.ContactInfo = new ContactInfo(EmailTextBox.Text, PhoneTextBox.Text, new Address(CityTextBox.Text, ZipTextBox.Text, HouseNumberTextBox.Text, StreetTextBox.Text));
+
+
+
+
+            customerManager.UpdateCustomer(c, selectedCustomerUI.Id);
+
+            selectedCustomerMemberList = MemberDataGrid.ItemsSource.Cast<MemberUI>()
+                                           .Select(x => new Member(x.Id, x.Name, x.Birthday))
+                                           .ToList();
+
+            selectedCustomerUI = new CustomerUI(c.Id, c.Name, c.ContactInfo.Email, c.ContactInfo.Phone, c.ContactInfo.Address.ToString(), membersUIs.Count());
+            selectedCustomerUI.MembersList = selectedCustomerMemberList;
+        }
+
+        private void AddNewCustomer()
+        {
+            c.Name = NameTextBox.Text;
+            c.ContactInfo = new ContactInfo(EmailTextBox.Text, PhoneTextBox.Text, new Address(CityTextBox.Text, ZipTextBox.Text, HouseNumberTextBox.Text, StreetTextBox.Text));
+
+            int currentId = customerManager.AddCustomer(c);
+            c.Id = currentId;
+
+            selectedCustomerUI = new CustomerUI(c.Id, c.Name, c.ContactInfo.Email, c.ContactInfo.Phone, c.ContactInfo.Address.ToString(), c.GetMembers().Count);
+            customers.Add(c);
+        }
+
+        #endregion
 
     }
 }
