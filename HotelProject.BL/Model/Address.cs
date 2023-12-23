@@ -12,6 +12,11 @@ namespace HotelProject.BL.Model
             _street = street;
         }
 
+        public Address()
+        {
+            
+        }
+
         public Address(string addressLine)
         {
             // Split the address line into parts using '|' as a separator

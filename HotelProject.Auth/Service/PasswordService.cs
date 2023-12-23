@@ -1,15 +1,13 @@
-﻿using HotelProject.BL.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HotelProject.BL.Security
+namespace HotelProject.Auth.Service
 {
-    public class PasswordSecurity
+    public class PasswordService
     {
-
         public bool VerifyPassword(string hashedPasswordFromDatabase, string enteredPassword)
         {
 

@@ -1,7 +1,7 @@
 ﻿using HotelProject.BL.Model;
 using HotelProject.BL.Managers;
-using HotelProject.BL.Security;
 using HotelProject.Util;
+using HotelProject.Auth.Service;
 
 
 namespace OrganizerRegistration
@@ -11,10 +11,10 @@ namespace OrganizerRegistration
         static void Main(string[] args)
         {
             OrganizerManager organizerManager;
-            PasswordSecurity passwordSecurity;
+            PasswordService passwordService;
 
             organizerManager = new OrganizerManager(RepositoryFactory.OrganizerRepository);
-            passwordSecurity = new PasswordSecurity();
+            passwordService = new PasswordService();
 
             string city = "Gent";
             string zipCode = "9000";
@@ -32,7 +32,7 @@ namespace OrganizerRegistration
 
             string password = "organizer";
 
-            string hashedPassword = passwordSecurity.HashPassword(password);
+            string hashedPassword = passwordService.HashPassword(password);
 
             Organizer newOrganizer = new Organizer(name, newContactInfo);
             newOrganizer.Username = userName;

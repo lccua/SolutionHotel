@@ -1,19 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.5" />
   </ItemGroup>
-
   <ItemGroup>
+    <ProjectReference Include="..\HotelProject.Auth\HotelProject.Auth.csproj" />
     <ProjectReference Include="..\HotelProject.BL\HotelProject.BL.csproj" />
     <ProjectReference Include="..\HotelProject.Util\HotelProject.Util.csproj" />
   </ItemGroup>
-
 </Project>

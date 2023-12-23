@@ -18,6 +18,11 @@ namespace HotelProject.BL.Model
             _contactInfo = contactInfo;
         }
 
+        public Organizer()
+        {
+            
+        }
+
         //------------------------------------------------------------------
 
         private int _organizerId;

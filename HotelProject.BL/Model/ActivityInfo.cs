@@ -11,6 +11,11 @@ namespace HotelProject.BL.Model
             _duration = duration;
         }
 
+        public ActivityInfo()
+        {
+            
+        }
+
         //------------------------------------------------------------------
 
         // Description property
