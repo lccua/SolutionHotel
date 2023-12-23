@@ -22,6 +22,11 @@ namespace HotelProject.UI.CustomerWPF.Model
             this.nrOfMembers = nrOfMembers;
         }
 
+        public CustomerUI()
+        {
+            
+        }
+
 
 
 

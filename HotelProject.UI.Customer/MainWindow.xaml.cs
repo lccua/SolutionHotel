@@ -63,7 +63,7 @@ namespace HotelProject.UI.CustomerWPF
         private void MenuItemAddCustomer_Click(object sender, RoutedEventArgs e)
         {
 
-            CustomerWindow w = new CustomerWindow(null, customers);
+            CustomerWindow w = new CustomerWindow(null, customers, false);
             if (w.ShowDialog()==true)
                 customersUIs.Add(w.selectedCustomerUI);
         }
@@ -83,22 +83,30 @@ namespace HotelProject.UI.CustomerWPF
 
         private void MenuItemUpdateCustomer_Click(object sender, RoutedEventArgs e)
         {
-            if (CustomerDataGrid.SelectedItem == null) MessageBox.Show("Customer not selected", "Update");
-            else
+            if (CustomerDataGrid.SelectedItem == null)
             {
-                int selectedIndex = CustomerDataGrid.SelectedIndex;
-                selectedCustomer = (CustomerUI)CustomerDataGrid.SelectedItem;
+                MessageBox.Show("Customer not selected", "Update");
+                return;
+            }
 
-                
-                CustomerWindow w = new CustomerWindow(selectedCustomer, customers);
-                if (w.ShowDialog() == true)
-                {
-                    customersUIs[selectedIndex] = w.selectedCustomerUI;
-                    // Refresh the DataGrid
-                    CustomerDataGrid.ItemsSource = customersUIs;
-                }
+            int selectedIndex = CustomerDataGrid.SelectedIndex;
+            selectedCustomer = (CustomerUI)CustomerDataGrid.SelectedItem;
+
+            CustomerWindow w = new CustomerWindow(selectedCustomer, customers, true);
+            if (w.ShowDialog() == true)
+            {
+                // Remove the old customer details from the collection
+                customersUIs.RemoveAt(selectedIndex);
+
+                // Add the updated customer details at the same index where the old details were
+                customersUIs.Insert(selectedIndex, w.selectedCustomerUI);
+
+                // Refresh the DataGrid to reflect the changes
+                CustomerDataGrid.ItemsSource = null;
+                CustomerDataGrid.ItemsSource = customersUIs;
             }
         }
+
 
     }
 }

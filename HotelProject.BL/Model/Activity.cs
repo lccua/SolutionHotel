@@ -1,5 +1,4 @@
-﻿using HotelProject.BL.Exceptions.Model;  // Assuming ActivityException is in the same namespace
-using System.Security.Cryptography;
+﻿using HotelProject.BL.Exceptions.Model; 
 
 namespace HotelProject.BL.Model
 {
@@ -30,16 +29,41 @@ namespace HotelProject.BL.Model
 
         public Activity() { }
 
-
         //------------------------------------------------------------------
 
         // ID property
         private int _id;
-        public int Id
-        {
-            get { return _id; }
-            set { ValidateId(value); _id = value; }
-        }
+        public int Id { get { return _id; } set { ValidateId(value); _id = value; }}
+
+        // Name property
+        private string _name;
+        public string Name { get { return _name; } set { ValidateName(value); _name = value; } }
+
+        // ActivityInfo property
+        private ActivityInfo _activityInfo;
+        public ActivityInfo ActivityInfo { get { return _activityInfo; } set { ValidateActivityInfo(value); _activityInfo = value; } }
+
+        // ScheduledDate property
+        private string _scheduledDate;
+        public string ScheduledDate { get { return _scheduledDate; } set { ValidateScheduledDate(value); _scheduledDate = value; } }
+
+        // AvailableSpots property
+        private int _availableSpots;
+        public int AvailableSpots { get { return _availableSpots; } set { ValidateAvailableSpots(value); _availableSpots = value; } }
+
+        // AdultPrice property
+        private decimal _adultPrice;
+        public decimal AdultPrice { get { return _adultPrice; } set { ValidateAdultPrice(value); _adultPrice = value; } }
+
+        // ChildPrice property
+        private decimal _childPrice;
+        public decimal ChildPrice { get { return _childPrice; } set { ValidateChildPrice(value); _childPrice = value; } }
+
+        // Discount property
+        private int _discount;
+        public int Discount { get { return _discount; } set { ValidateDiscount(value); _discount = value; } }
+
+        //------------------------------------------------------------------
 
         // Validation for the ID property
         private void ValidateId(int value)
@@ -48,17 +72,6 @@ namespace HotelProject.BL.Model
             {
                 throw new ActivityException("Invalid ID");
             }
-        }
-
-
-        //------------------------------------------------------------------
-
-        // Name property
-        private string _name;
-        public string Name
-        {
-            get { return _name; }
-            set { ValidateName(value); _name = value; }
         }
 
         // Validation for the Name property
@@ -70,16 +83,6 @@ namespace HotelProject.BL.Model
             }
         }
 
-        //------------------------------------------------------------------
-
-        // ActivityInfo property
-        private ActivityInfo _activityInfo;
-        public ActivityInfo ActivityInfo
-        {
-            get { return _activityInfo; }
-            set { ValidateActivityInfo(value); _activityInfo = value; }
-        }
-
         // Validation for the ActivityInfo property
         private void ValidateActivityInfo(ActivityInfo value)
         {
@@ -87,16 +90,6 @@ namespace HotelProject.BL.Model
             {
                 throw new ActivityException("ActivityInfo is null");
             }
-        }
-
-        //------------------------------------------------------------------
-
-        // ScheduledDate property
-        private string _scheduledDate;
-        public string ScheduledDate
-        {
-            get { return _scheduledDate; }
-            set { ValidateScheduledDate(value); _scheduledDate = value; }
         }
 
         // Validation for the ScheduledDate property
@@ -115,17 +108,6 @@ namespace HotelProject.BL.Model
             }
         }
 
-
-        //------------------------------------------------------------------
-
-        // AvailableSpots property
-        private int _availableSpots;
-        public int AvailableSpots
-        {
-            get { return _availableSpots; }
-            set { ValidateAvailableSpots(value); _availableSpots = value; }
-        }
-
         // Validation for the AvailableSpots property
         private void ValidateAvailableSpots(int value)
         {
@@ -133,16 +115,6 @@ namespace HotelProject.BL.Model
             {
                 throw new ActivityException("AvailableSpots cannot be negative");
             }
-        }
-
-        //------------------------------------------------------------------
-
-        // AdultPrice property
-        private decimal _adultPrice;
-        public decimal AdultPrice
-        {
-            get { return _adultPrice; }
-            set { ValidateAdultPrice(value); _adultPrice = value; }
         }
 
         // Validation for the AdultPrice property
@@ -154,16 +126,6 @@ namespace HotelProject.BL.Model
             }
         }
 
-        //------------------------------------------------------------------
-
-        // ChildPrice property
-        private decimal _childPrice;
-        public decimal ChildPrice
-        {
-            get { return _childPrice; }
-            set { ValidateChildPrice(value); _childPrice = value; }
-        }
-
         // Validation for the ChildPrice property
         private void ValidateChildPrice(decimal value)
         {
@@ -171,16 +133,6 @@ namespace HotelProject.BL.Model
             {
                 throw new ActivityException("ChildPrice cannot be negative");
             }
-        }
-
-        //------------------------------------------------------------------
-
-        // Discount property
-        private int _discount;
-        public int Discount
-        {
-            get { return _discount; }
-            set { ValidateDiscount(value); _discount = value; }
         }
 
         // Validation for the Discount property
@@ -194,8 +146,5 @@ namespace HotelProject.BL.Model
                 throw new ActivityException($"Discount must be between {minimumDiscount}% and {maximumDiscount}%");
             }
         }
-
-        //------------------------------------------------------------------
-
     }
 }

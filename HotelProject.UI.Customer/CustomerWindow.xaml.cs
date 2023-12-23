@@ -27,13 +27,12 @@ namespace HotelProject.UI.CustomerWPF
     {
 
         private CustomerManager customerManager;
-        private bool IsUpdate => selectedCustomerUI != null;
+        private bool IsUpdate = false;
 
         public CustomerUI selectedCustomerUI;
 
         public List<Member> selectedCustomerMemberList;
 
-        public Member newMember = new Member();
         private List<Customer> customers; // Add this field
 
         private ObservableCollection<MemberUI> membersUIs = new ObservableCollection<MemberUI>();
@@ -45,7 +44,7 @@ namespace HotelProject.UI.CustomerWPF
 
         #region Initialization and Setup
 
-        public CustomerWindow(CustomerUI selectedCustomerUI, List<Customer> customers)
+        public CustomerWindow(CustomerUI selectedCustomerUI, List<Customer> customers,bool isUpdate)
         {
             InitializeComponent();
             customerManager = new CustomerManager(RepositoryFactory.CustomerRepository);
@@ -53,6 +52,9 @@ namespace HotelProject.UI.CustomerWPF
             this.customers = customers; // Store the customers list locally
 
             this.selectedCustomerUI = selectedCustomerUI;
+
+            this.IsUpdate = isUpdate;
+
       
             if (IsUpdate)
             {
@@ -62,7 +64,6 @@ namespace HotelProject.UI.CustomerWPF
                 membersUIs = new ObservableCollection<MemberUI>(selectedCustomerMemberList.Select(x => new MemberUI(x.Id, x.Name, x.BirthDay)));
                 MemberDataGrid.ItemsSource = membersUIs;
 
-                selectedCustomerMemberList.Clear();
 
                 IdTextBox.Text = selectedCustomerUI.Id.ToString();
                 NameTextBox.Text = selectedCustomerUI.Name;
@@ -110,23 +111,30 @@ namespace HotelProject.UI.CustomerWPF
 
         private void MenuItemAddMember_Click(object sender, RoutedEventArgs e)
         {
+            if (selectedCustomerUI == null)
+            {
+                selectedCustomerUI = new CustomerUI();
+                selectedCustomerUI.MembersList = new List<Member>();
+            }
+
             MemberWindow w = new MemberWindow(selectedCustomerUI);
 
             if (w.ShowDialog() == true)
             {
+                
+                Member newMember = new Member(w.memberUI.Name, w.memberUI.Birthday);
+
+
                 membersUIs.Add(w.memberUI);
 
-                newMember.Name = w.memberUI.Name;
-                newMember.BirthDay = w.memberUI.Birthday;
                 
-                selectedCustomerUI.MembersList.Add(newMember);
 
                 
 
                 // Update the MemberDataGrid with the new member
                 MemberDataGrid.ItemsSource = membersUIs;
 
-                c.AddMember(newMember);
+                c.Members.Add(newMember);   
             }
                
         }
@@ -143,6 +151,9 @@ namespace HotelProject.UI.CustomerWPF
                 customerManager.DeleteMember(memberId);
 
                 membersUIs.Remove(selectedMember);
+
+                Member m = new Member(selectedMember.Id, selectedMember.Name, selectedMember.Birthday);
+                selectedCustomerUI.MembersList.Remove(m);
             }
 
            
@@ -180,7 +191,11 @@ namespace HotelProject.UI.CustomerWPF
             int currentId = customerManager.AddCustomer(c);
             c.Id = currentId;
 
+            // Update the selectedCustomerUI to represent the newly added customer
             selectedCustomerUI = new CustomerUI(c.Id, c.Name, c.ContactInfo.Email, c.ContactInfo.Phone, c.ContactInfo.Address.ToString(), c.GetMembers().Count);
+            selectedCustomerUI.MembersList = c.GetMembers(); // Assuming GetMembers() provides the updated list
+
+            // Add the new customer to the local list of customers
             customers.Add(c);
         }
 

@@ -1,4 +1,5 @@
-﻿using HotelProject.UI.CustomerWPF.Model;
+﻿using HotelProject.BL.Model;
+using HotelProject.UI.CustomerWPF.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +22,26 @@ namespace HotelProject.UI.CustomerWPF
     public partial class MemberWindow : Window
     {
         public MemberUI memberUI;
+        public CustomerUI customerUI;
+
+        private int nextMemberId;
+
 
         public MemberWindow(CustomerUI customerUI)
         {
             InitializeComponent();
+
+            if (customerUI == null)
+            {
+                this.customerUI = new CustomerUI();
+                this.customerUI.MembersList = new List<Member>();
+            }
+            else
+            {
+                this.customerUI = customerUI;
+            }
+
+
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -39,7 +56,10 @@ namespace HotelProject.UI.CustomerWPF
             DateTime? selectedDate = BirthDayBox.SelectedDate;
             DateOnly dateOnlyBirthday = DateOnly.FromDateTime(selectedDate.Value);
 
+
+
             memberUI = new MemberUI(NameTextBox.Text, dateOnlyBirthday);
+
 
             DialogResult = true;
             Close();

@@ -1,33 +1,18 @@
-﻿using System;
+﻿using InitializeDatabase;
+using System;
 using System.Data.SqlClient;
 using System.IO;
 
-class Program
+internal class Program
 {
-    static void Main()
+    static void Main(string[] args)
     {
-        string connectionString = "Data Source=LAPTOP-CRDVREFU\\SQLEXPRESS;Initial Catalog=HotelDB;Integrated Security=True;TrustServerCertificate=True"
+        string connectionString = @"Data Source=DESKTOP-C2MADIB;Initial Catalog=HotelDB;Integrated Security=True";
 
-;
-        string scriptFilePath = "C:\\Users\\lucac\\Downloads\\SolutionHotelWoensdag-master\\SolutionHotelWoensdag-master\\HotelProject.DL\\SQL\\CREATE_TABLES.sql"; 
-        try
-        {
-            string sqlScript = File.ReadAllText(scriptFilePath);
+        DatabaseInitializer initializer = new DatabaseInitializer(connectionString);
+        initializer.InitializeDatabase();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                using (SqlCommand command = new SqlCommand(sqlScript, connection))
-                {
-                    command.ExecuteNonQuery();
-                    Console.WriteLine("SQL script executed successfully.");
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error executing SQL script: {ex.Message}");
-        }
+        Console.WriteLine("Initialization completed");
+        Console.WriteLine("Log file can be found at: C:\\Users\\lucac\\source\\repos\\SolutionHotel\\InitializeDatabase\\Log\\log.txt");
     }
 }

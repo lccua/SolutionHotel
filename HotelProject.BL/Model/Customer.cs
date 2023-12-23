@@ -21,13 +21,8 @@ namespace HotelProject.BL.Model
 
         //------------------------------------------------------------------
 
-        public void AddMember(Member member)
-        {
-            if (!_members.Contains(member))
-                _members.Add(member);
-            else
-                throw new CustomerException("addmember");
-        }
+        
+        
 
         public void RemoveMember(Member member)
         {

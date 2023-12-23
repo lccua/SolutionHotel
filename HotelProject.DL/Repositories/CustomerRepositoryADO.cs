@@ -73,7 +73,7 @@ namespace HotelProject.DL.Repositories
                                 Member member = new Member((int)memberReader["id"],(string)memberReader["name"], DateOnly.FromDateTime((DateTime)memberReader["birthday"]));
 
                                 // Populate other properties of the Member object
-                                customer.AddMember(member);
+                                customer.Members.Add(member);
                             }
                         }
                     }
