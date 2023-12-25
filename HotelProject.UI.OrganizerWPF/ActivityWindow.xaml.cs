@@ -1,5 +1,6 @@
 ﻿using HotelProject.BL.Managers;
 using HotelProject.BL.Model;
+using HotelProject.UI.OrganizerWPF.Mapper;
 using HotelProject.UI.OrganizerWPF.Model;
 using HotelProject.Util;
 using System;
@@ -73,7 +74,8 @@ namespace HotelProject.UI.OrganizerWPF
                 a.Id = currentId;
 
                 // Create ActivityUI object
-                activityUI = new ActivityUI(a.Id, a.Name, a.ScheduledDate, a.AvailableSpots, a.AdultPrice, a.ChildPrice, a.Discount, a.ActivityInfo.Description, a.ActivityInfo.Duration, a.ActivityInfo.Address.ToString());
+
+                activityUI = ActivityMapper.MapToUI(a);
 
                 DialogResult = true;
                 Close();

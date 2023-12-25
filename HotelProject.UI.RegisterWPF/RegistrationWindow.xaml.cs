@@ -92,16 +92,17 @@ namespace HotelProject.UI.RegisterWPF
 
         private void UpdateTotalPrice()
         {
-            if (selectedActivity == null)
+            if (selectedActivity == null || selectedMembers == null)
             {
                 // Exit the function early if selectedActivity is null
                 return;
             }
 
+
             totalPrice = registrationManager.CalculateTotalPrice(selectedMembers, selectedActivity);
 
             // Display the total price in the TextBox
-            TotalPriceTextBox.Text = totalPrice.ToString("C"); // Assuming TotalPriceTextBox is the name of your TextBox
+            TotalPriceTextBox.Text = totalPrice.ToString("C");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using HotelProject.BL.Managers;
 using HotelProject.BL.Model;
+using HotelProject.UI.CustomerWPF.Mapper;
 using HotelProject.UI.CustomerWPF.Model;
 using HotelProject.Util;
 using System;
@@ -33,7 +34,7 @@ namespace HotelProject.UI.CustomerWPF
 
         public List<Member> selectedCustomerMemberList;
 
-        private List<Customer> customers; // Add this field
+        private List<Customer> customers; 
 
         private ObservableCollection<MemberUI> membersUIs = new ObservableCollection<MemberUI>();
 
@@ -152,7 +153,8 @@ namespace HotelProject.UI.CustomerWPF
 
                 membersUIs.Remove(selectedMember);
 
-                Member m = new Member(selectedMember.Id, selectedMember.Name, selectedMember.Birthday);
+                Member m = MemberMapper.MapToDomain(selectedMember);
+
                 selectedCustomerUI.MembersList.Remove(m);
             }
 
@@ -179,7 +181,9 @@ namespace HotelProject.UI.CustomerWPF
                                            .Select(x => new Member(x.Id, x.Name, x.Birthday))
                                            .ToList();
 
-            selectedCustomerUI = new CustomerUI(c.Id, c.Name, c.ContactInfo.Email, c.ContactInfo.Phone, c.ContactInfo.Address.ToString(), membersUIs.Count());
+
+            selectedCustomerUI = CustomerMapper.MapToUI(c);
+            
             selectedCustomerUI.MembersList = selectedCustomerMemberList;
         }
 
@@ -192,8 +196,10 @@ namespace HotelProject.UI.CustomerWPF
             c.Id = currentId;
 
             // Update the selectedCustomerUI to represent the newly added customer
-            selectedCustomerUI = new CustomerUI(c.Id, c.Name, c.ContactInfo.Email, c.ContactInfo.Phone, c.ContactInfo.Address.ToString(), c.GetMembers().Count);
-            selectedCustomerUI.MembersList = c.GetMembers(); // Assuming GetMembers() provides the updated list
+
+            selectedCustomerUI = CustomerMapper.MapToUI(c);
+
+            selectedCustomerUI.MembersList = selectedCustomerUI.MembersList; // Assuming GetMembers() provides the updated list
 
             // Add the new customer to the local list of customers
             customers.Add(c);

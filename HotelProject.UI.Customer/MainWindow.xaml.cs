@@ -1,6 +1,7 @@
 ﻿using HotelProject.BL.Managers;
 using HotelProject.BL.Model;
 using HotelProject.DL.Repositories;
+using HotelProject.UI.CustomerWPF.Mapper;
 using HotelProject.UI.CustomerWPF.Model;
 using HotelProject.Util;
 using System;
@@ -43,10 +44,11 @@ namespace HotelProject.UI.CustomerWPF
 
             customersUIs = new ObservableCollection<CustomerUI>(customers.Select(x =>
             {
-                var customerUI = new CustomerUI(x.Id, x.Name, x.ContactInfo.Email, x.ContactInfo.Phone, x.ContactInfo.Address.ToString(), x.GetMembers().Count);
+                var customerUI = CustomerMapper.MapToUI(x);
+
 
                 // Populate MembersList
-                customerUI.MembersList = x.GetMembers();
+                customerUI.MembersList = customerUI.MembersList;
 
                 return customerUI;
             }));

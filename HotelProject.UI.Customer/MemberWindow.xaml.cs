@@ -24,7 +24,6 @@ namespace HotelProject.UI.CustomerWPF
         public MemberUI memberUI;
         public CustomerUI customerUI;
 
-        private int nextMemberId;
 
 
         public MemberWindow(CustomerUI customerUI)
