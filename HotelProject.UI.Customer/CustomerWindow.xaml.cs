@@ -54,6 +54,8 @@ namespace HotelProject.UI.CustomerWPF
                 membersUIs = new ObservableCollection<MemberUI>(members.Select(x => MemberMapper.MapToUI(x)));
                 MemberDataGrid.ItemsSource = membersUIs;
 
+                customer.Members.Clear();
+
                 IdTextBox.Text = selectedCustomerUI.Id.ToString();
                 NameTextBox.Text = selectedCustomerUI.Name;
                 EmailTextBox.Text = selectedCustomerUI.Email;
@@ -145,19 +147,16 @@ namespace HotelProject.UI.CustomerWPF
 
             customer.ContactInfo = new ContactInfo(EmailTextBox.Text, PhoneTextBox.Text, new Address(CityTextBox.Text, ZipTextBox.Text, HouseNumberTextBox.Text, StreetTextBox.Text));
 
-
-            customer.Members = MemberDataGrid.ItemsSource.Cast<MemberUI>()
-                                           .Select(x => new Member(x.Id, x.Name, x.Birthday))
-                                           .ToList();
-
             customerManager.UpdateCustomer(customer, customer.Id);
-
-            
 
 
             customerUI = CustomerMapper.MapToUI(customer);
-            
-            customerUI.Members = customer.Members;
+            customerUI.Members.Clear();
+            customerUI.Members.AddRange(membersUIs.Select(x => MemberMapper.MapToDomain(x)));
+
+            customerUI.NrOfMembers = membersUIs.Count;
+
+
         }
 
         private void AddNewCustomer()
@@ -170,10 +169,12 @@ namespace HotelProject.UI.CustomerWPF
 
 
             customerUI = CustomerMapper.MapToUI(customer);
+            customerUI.Members.Clear();
+            customerUI.Members.AddRange(membersUIs.Select(x => MemberMapper.MapToDomain(x)));
 
-            customerUI.Members = customerUI.Members; 
+            customerUI.NrOfMembers = membersUIs.Count;
 
-        
+
         }
 
         #endregion
