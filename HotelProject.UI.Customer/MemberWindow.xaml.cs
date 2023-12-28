@@ -16,15 +16,11 @@ using System.Windows.Shapes;
 
 namespace HotelProject.UI.CustomerWPF
 {
-    /// <summary>
-    /// Interaction logic for MemberWindow.xaml
-    /// </summary>
+ 
     public partial class MemberWindow : Window
     {
         public MemberUI memberUI;
         public CustomerUI customerUI;
-
-
 
         public MemberWindow(CustomerUI customerUI)
         {
@@ -33,14 +29,12 @@ namespace HotelProject.UI.CustomerWPF
             if (customerUI == null)
             {
                 this.customerUI = new CustomerUI();
-                this.customerUI.MembersList = new List<Member>();
+                this.customerUI.Members = new List<Member>();
             }
             else
             {
                 this.customerUI = customerUI;
             }
-
-
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -48,17 +42,13 @@ namespace HotelProject.UI.CustomerWPF
             Close();
         }
 
-
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             
             DateTime? selectedDate = BirthDayBox.SelectedDate;
             DateOnly dateOnlyBirthday = DateOnly.FromDateTime(selectedDate.Value);
 
-
-
             memberUI = new MemberUI(NameTextBox.Text, dateOnlyBirthday);
-
 
             DialogResult = true;
             Close();

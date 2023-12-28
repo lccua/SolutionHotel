@@ -37,20 +37,25 @@ namespace HotelProject.UI.OrganizerWPF
            
         }
 
+        private bool IsAnyFieldEmpty()
+        {
+            var inputFields = new[] {AdultPriceTextBox.Text,ChildPriceTextBox.Text,DiscountTextBox.Text,
+                                     AvailableSpotsTextBox.Text,DurationTextBox.Text};
+
+            return inputFields.Any(string.IsNullOrWhiteSpace) || SheduledDate.SelectedDate == null;
+        }
+
+
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                // Validate and parse input values
-                if (string.IsNullOrWhiteSpace(AdultPriceTextBox.Text) ||
-                    string.IsNullOrWhiteSpace(ChildPriceTextBox.Text) ||
-                    string.IsNullOrWhiteSpace(DiscountTextBox.Text) ||
-                    string.IsNullOrWhiteSpace(AvailableSpotsTextBox.Text) ||
-                    string.IsNullOrWhiteSpace(DurationTextBox.Text) ||
-                    string.IsNullOrWhiteSpace(NameTextBox.Text) ||
-                    SheduledDate.SelectedDate == null)
+                // Check if any of the textboxes is empty, if so show message box and stop further processing
+                if (IsAnyFieldEmpty())
                 {
-                    throw new ArgumentException("Input fields cannot be empty");
+                    MessageBox.Show("Please fill in all the fields.", "Incomplete Information",
+                                         MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
                 }
 
                 // Replace '.' with ',' in price TextBoxes

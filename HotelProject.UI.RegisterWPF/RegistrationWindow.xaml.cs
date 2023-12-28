@@ -39,8 +39,6 @@ namespace HotelProject.UI.RegisterWPF
 
             selectedCustomer = customer; // Store the selected customer
 
-
-
             CustomerNameTextBox.Text = selectedCustomer.Name;
 
 

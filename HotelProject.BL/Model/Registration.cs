@@ -30,7 +30,7 @@ namespace HotelProject.BL.Model
         {
             if (value <= 0)
             {
-                throw new Exception("Invalid ID");
+                throw new RegistrationException("Invalid ID");
             }
             _id = value;
         }
@@ -48,7 +48,7 @@ namespace HotelProject.BL.Model
         {
             if (value == null)
             {
-                throw new Exception("Customer is null");
+                throw new RegistrationException("Customer is null");
             }
             _customer = value;
         }
@@ -66,7 +66,7 @@ namespace HotelProject.BL.Model
         {
             if (value == null)
             {
-                throw new Exception("Activity is null");
+                throw new RegistrationException("Activity is null");
             }
             _activity = value;
         }
@@ -84,7 +84,7 @@ namespace HotelProject.BL.Model
         {
             if (value == null || value.Count == 0)
             {
-                throw new Exception("Members list is empty or null.");
+                throw new RegistrationException("Members list is empty or null.");
             }
             _members = value;
         }
@@ -102,7 +102,7 @@ namespace HotelProject.BL.Model
         {
             if (value <= 0)
             {
-                throw new Exception("Total price is 0");
+                throw new RegistrationException("Total price is 0");
             }
             _totalPrice = value;
         }

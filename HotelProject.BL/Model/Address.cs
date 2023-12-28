@@ -24,9 +24,9 @@ namespace HotelProject.BL.Model
 
             // Assign values to the private fields
             _houseNumber = parts[3];
-            _street = parts[1];
+            _street = parts[2];
             _municipality = parts[0];
-            _zipCode = parts[2];
+            _zipCode = parts[1];
         }
 
 

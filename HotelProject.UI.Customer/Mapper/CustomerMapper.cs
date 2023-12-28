@@ -20,7 +20,7 @@ namespace HotelProject.UI.CustomerWPF.Mapper
                 Phone = customer.ContactInfo.Phone,
                 Address = customer.ContactInfo.Address.ToString(),
                 NrOfMembers = customer.Members.Count,
-                MembersList = customer.Members
+                Members = customer.Members
             };
         }
 
@@ -30,7 +30,7 @@ namespace HotelProject.UI.CustomerWPF.Mapper
             var contactInfo = new ContactInfo(customerUI.Email, customerUI.Phone, address);
 
             var customer = new Customer(customerUI.Name, customerUI.Id, contactInfo);
-            customer.Members = customerUI.MembersList;
+            customer.Members = customerUI.Members;
 
             return customer;
         }

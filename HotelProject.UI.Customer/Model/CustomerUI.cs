@@ -46,8 +46,8 @@ namespace HotelProject.UI.CustomerWPF.Model
         public string Address { get { return address; } set { address = value; OnPropertyChanged(); } }
 
 
-        private List<Member> membersList;
-        public List<Member> MembersList { get { return membersList; } set { membersList = value; OnPropertyChanged(); } }
+        private List<Member> members;
+        public List<Member> Members { get { return members; } set { members = value; OnPropertyChanged(); } }
 
         private int nrOfMembers;
         public int NrOfMembers { get { return nrOfMembers; } set { nrOfMembers = value; OnPropertyChanged(); } }

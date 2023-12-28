@@ -37,7 +37,7 @@ namespace HotelProject.BL.Model
         {
             if (value <= 0)
             {
-                throw new Exception("Invalid ID");
+                throw new MemberException("Invalid ID");
             }
             _id = value;
         }
@@ -55,7 +55,7 @@ namespace HotelProject.BL.Model
         {
             if (string.IsNullOrWhiteSpace(value))
             {
-                throw new OrganizerException("Name cannot be null or empty");
+                throw new MemberException("Name cannot be null or empty");
             }
             _name = value;
         }

@@ -25,9 +25,9 @@ namespace HotelProject.BL.Managers
             {
                 return _activityRepository.GetActivities(filter);
             }
-            catch (Exception ex)
+            catch (ActivityManagerException ex)
             {
-                throw new ActivityManagerException("GetAllActivities", ex);
+                throw new ActivityManagerException("ActivityManager: GetAllActivities", ex);
             }
         }
         public int AddActivity(Activity activity)
@@ -36,9 +36,9 @@ namespace HotelProject.BL.Managers
             {
                  return _activityRepository.AddActivity(activity);
             }
-            catch (Exception ex)
+            catch (ActivityManagerException ex)
             {
-                throw new ActivityManagerException("AddActivity", ex);
+                throw new ActivityManagerException("ActivityManager: AddActivity", ex);
             }
         }
 
@@ -48,9 +48,9 @@ namespace HotelProject.BL.Managers
             {
                 return _activityRepository.GetLastActivityId();
             }
-            catch (Exception ex)
+            catch (ActivityManagerException ex)
             {
-                throw new ActivityManagerException("GetLastActivityId", ex);
+                throw new ActivityManagerException("ActivityManager: GetLastActivityId", ex);
             }
         }
     }

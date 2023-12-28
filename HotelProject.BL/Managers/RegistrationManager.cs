@@ -1,4 +1,5 @@
-﻿using HotelProject.BL.Interfaces;
+﻿using HotelProject.BL.Exceptions.Manager;
+using HotelProject.BL.Interfaces;
 using HotelProject.BL.Model;
 using System;
 using System.Collections.Generic;
@@ -23,46 +24,65 @@ namespace HotelProject.BL.Managers
             {
                 _registrationRepository.SaveRegistration(registration);
             }
-            catch (Exception)
+            catch (RegistrationManagerException ex)
             {
 
-                throw;
+                throw new RegistrationManagerException("RegistrationManager: SaveRegistration", ex);
             }
-        
+
         }
 
         private int CalculateAge(DateOnly birthday)
         {
-            DateOnly today = DateOnly.FromDateTime(DateTime.Today);
-            int age = today.Year - birthday.Year;
-
-            if (birthday.DayOfYear > today.DayOfYear)
+            try
             {
-                age--;
-            }
+                DateOnly today = DateOnly.FromDateTime(DateTime.Today);
+                int age = today.Year - birthday.Year;
 
-            return age;
+                if (birthday.DayOfYear > today.DayOfYear)
+                {
+                    age--;
+                }
+
+                return age;
+            }
+            catch (RegistrationManagerException ex)
+            {
+
+                throw new RegistrationManagerException("RegistrationManager: CalculateAge", ex);
+            }
+          
         }
 
 
         public decimal CalculateTotalPrice(List<Member> selectedMembers, Activity selectedActivity)
         {
-            // Calculate total price based on selected members and activity
-            decimal totalPrice = 0;
-
-            foreach (Member member in selectedMembers)
+            try
             {
-                // Calculate age based on member's birthday
-                int age = CalculateAge(member.BirthDay);
+                // Calculate total price based on selected members and activity
+                decimal totalPrice = 0;
 
-                // Determine the price based on age
-                decimal memberPrice = age >= 18 ? selectedActivity.AdultPrice : selectedActivity.ChildPrice;
+                foreach (Member member in selectedMembers)
+                {
+                    // Calculate age based on member's birthday
+                    int age = CalculateAge(member.BirthDay);
 
-                // Add member price to total
-                totalPrice += memberPrice;
+                    // Determine the price based on age
+                    decimal memberPrice = age >= 18 ? selectedActivity.AdultPrice : selectedActivity.ChildPrice;
+
+                    // Add member price to total
+                    totalPrice += memberPrice;
+                }
+
+                return totalPrice;
+            }
+            catch (RegistrationManagerException ex)
+            {
+
+                throw new RegistrationManagerException("RegistrationManager: CalculateTotalPrice", ex);
             }
 
-            return totalPrice;
+
         }
     }
 }

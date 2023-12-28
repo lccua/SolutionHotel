@@ -46,29 +46,30 @@ VALUES
     ('Western Trail Ride', '2024-03-20', 30, 45.00, 25.00, 0, 19),
     ('Japanese Culinary Tour', '2024-03-25', 40, 40.00, 25.00, 0, 20);
 
--- Dummy inserts for Customer table with formatted telephone numbers and addresses
+-- Dummy inserts for Customer table with formatted telephone numbers and Belgian addresses
 INSERT INTO Customer (name, email, phone, address, status)
 VALUES
-    ('John Doe', 'john.doe@example.com', '0412457889', '123 Main St|10001|Ave A|1', 1),
-    ('Alice Smith', 'alice.smith@example.com', '0412457890', '456 Elm St|20002|Bvld B|1', 1),
-    ('Bob Johnson', 'bob.johnson@example.com', '0412457891', '789 Oak St|30003|Ct C|1', 1),
-    ('Eva Williams', 'eva.williams@example.com', '0412457892', '234 Maple St|40004|Dv D|1', 1),
-    ('Mike Davis', 'mike.davis@example.com', '0412457893', '567 Birch St|50005|Ev E|1', 1),
-    ('Lisa Wilson', 'lisa.wilson@example.com', '0412457894', '890 Cedar St|60006|Fv F|1', 1),
-    ('David Lee', 'david.lee@example.com', '0412457895', '345 Pine St|70007|Gv G|1', 1),
-    ('Mary Taylor', 'mary.taylor@example.com', '0412457896', '678 Oak St|80008|Hv H|1', 1),
-    ('Kevin Moore', 'kevin.moore@example.com', '0412457897', '456 Elm St|90009|Iv I|1', 1),
-    ('Helen Adams', 'helen.adams@example.com', '0412457898', '123 Main St|10010|Jv J|1', 1),
-    ('William Wilson', 'william.wilson@example.com', '0412457899', '890 Cedar St|11011|Kv K|1', 1),
-    ('Nancy Hall', 'nancy.hall@example.com', '0412457800', '234 Maple St|12012|Lv L|1', 1),
-    ('Michael Johnson', 'michael.johnson@example.com', '0412457801', '567 Birch St|13013|Mv M|1', 1),
-    ('Laura White', 'laura.white@example.com', '0412457802', '123 Main St|14014|Nv N|1', 1),
-    ('Daniel Smith', 'daniel.smith@example.com', '0412457803', '456 Elm St|15015|Ov O|1', 1),
-    ('Sarah Davis', 'sarah.davis@example.com', '0412457804', '678 Oak St|16016|Pv P|1', 1),
-    ('Thomas Lee', 'thomas.lee@example.com', '0412457805', '345 Pine St|17017|Qv Q|1', 1),
-    ('Jennifer Moore', 'jennifer.moore@example.com', '0412457806', '890 Cedar St|18018|Rv R|1', 1),
-    ('Richard Adams', 'richard.adams@example.com', '0412457807', '123 Main St|19019|Sv S|1', 1),
-    ('Catherine Wilson', 'catherine.wilson@example.com', '0412457808', '678 Oak St|20020|Tv T|1', 1);
+    ('John Doe', 'john.doe@example.com', '0412457889', 'Brussels|1000|Main St|1', 1),
+    ('Alice Smith', 'alice.smith@example.com', '0412457890', 'Antwerp|2000|Elm St|456', 1),
+    ('Bob Johnson', 'bob.johnson@example.com', '0412457891', 'Ghent|9000|Oak St|789', 1),
+    ('Eva Williams', 'eva.williams@example.com', '0412457892', 'Leuven|3000|Maple St|234', 1),
+    ('Mike Davis', 'mike.davis@example.com', '0412457893', 'Bruges|8000|Birch St|567', 1),
+    ('Lisa Wilson', 'lisa.wilson@example.com', '0412457894', 'Namur|5000|Cedar St|890', 1),
+    ('David Lee', 'david.lee@example.com', '0412457895', 'Liege|4000|Pine St|345', 1),
+    ('Mary Taylor', 'mary.taylor@example.com', '0412457896', 'Charleroi|6000|Spruce St|678', 1),
+    ('Kevin Moore', 'kevin.moore@example.com', '0412457897', 'Mons|7000|Elm St|456', 1),
+    ('Helen Adams', 'helen.adams@example.com', '0412457898', 'Arlon|6700|Main St|123', 1),
+    ('William Wilson', 'william.wilson@example.com', '0412457899', 'Tournai|7500|Cedar St|890', 1),
+    ('Nancy Hall', 'nancy.hall@example.com', '0412457800', 'Hasselt|3500|Maple St|234', 1),
+    ('Michael Johnson', 'michael.johnson@example.com', '0412457801', 'Ostend|8400|Birch St|567', 1),
+    ('Laura White', 'laura.white@example.com', '0412457802', 'Ypres|8900|Main St|123', 1),
+    ('Daniel Smith', 'daniel.smith@example.com', '0412457803', 'Mechelen|2800|Elm St|456', 1),
+    ('Sarah Davis', 'sarah.davis@example.com', '0412457804', 'Kortrijk|8500|Oak St|678', 1),
+    ('Thomas Lee', 'thomas.lee@example.com', '0412457805', 'Sint-Niklaas|9100|Pine St|345', 1),
+    ('Jennifer Moore', 'jennifer.moore@example.com', '0412457806', 'Genk|3600|Cedar St|890', 1),
+    ('Richard Adams', 'richard.adams@example.com', '0412457807', 'Roeselare|8800|Main St|123', 1),
+    ('Catherine Wilson', 'catherine.wilson@example.com', '0412457808', 'Verviers|4800|Oak St|678', 1);
+
 
 -- Dummy inserts for Member table with customer_id references and status set to 1
 INSERT INTO Member (name, birthday, status, customer_id)

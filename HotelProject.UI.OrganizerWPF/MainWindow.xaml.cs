@@ -41,8 +41,6 @@ namespace HotelProject.UI.OrganizerWPF
             InitializeComponent();
             organizerManager = new OrganizerManager(RepositoryFactory.OrganizerRepository);
             passwordService = new PasswordService();
-
-
         }
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)

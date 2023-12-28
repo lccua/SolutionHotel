@@ -106,12 +106,11 @@ namespace HotelProject.DL.Repositories
 
                 return activities;
             }
-            catch (Exception ex)
+            catch (ActivityRepositoryException ex)
             {
-                throw new CustomerRepositoryException("GetCustomer", ex);
+                throw new ActivityRepositoryException("ActivityRepositoryADO: GetActivities", ex);
             }
         }
-
 
         public int AddActivity(Activity activity)
         {
@@ -157,42 +156,50 @@ namespace HotelProject.DL.Repositories
                        
                      
                     }
-                    catch (Exception ex)
+                    catch (ActivityRepositoryException ex)
                     {
                         transaction.Rollback();
+                        throw new ActivityRepositoryException("ActivityRepositoryADO: AddActivity", ex);
                     }
                 }
             }
-            catch (Exception ex)
+            catch (ActivityRepositoryException ex)
             {
-                throw new CustomerRepositoryException("AddCustomer", ex);
+                throw new ActivityRepositoryException("ActivityRepositoryADO: AddActivity", ex);
             }
             return id;
         }
 
-
         public int GetLastActivityId()
         {
             int lastId = -1; // Default value if no rows are found.
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                connection.Open();
-
-                string sql = $"SELECT MAX(id) FROM Activity";
-
-                using (SqlCommand command = new SqlCommand(sql, connection))
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    object result = command.ExecuteScalar();
+                    connection.Open();
 
-                    if (result != DBNull.Value)
+                    string sql = $"SELECT MAX(id) FROM Activity";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
                     {
-                        lastId = Convert.ToInt32(result);
+                        object result = command.ExecuteScalar();
+
+                        if (result != DBNull.Value)
+                        {
+                            lastId = Convert.ToInt32(result);
+                        }
                     }
                 }
+
+                return lastId;
+            }
+            catch (ActivityRepositoryException ex)
+            {
+
+                throw new ActivityRepositoryException("ActivityRepositoryADO: GetLastActivityId", ex);
             }
 
-            return lastId;
         }
 
     }

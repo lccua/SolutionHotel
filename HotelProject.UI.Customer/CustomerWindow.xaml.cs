@@ -26,53 +26,38 @@ namespace HotelProject.UI.CustomerWPF
     /// </summary>
     public partial class CustomerWindow : Window
     {
-
         private CustomerManager customerManager;
         private bool IsUpdate = false;
 
-        public CustomerUI selectedCustomerUI;
-
-        public List<Member> selectedCustomerMemberList;
-
-        private List<Customer> customers; 
+        public CustomerUI customerUI;
+        private Customer customer = new Customer();
 
         private ObservableCollection<MemberUI> membersUIs = new ObservableCollection<MemberUI>();
-
-        private Customer c = new Customer();
-
-
-        
+        public List<Member> members;
 
         #region Initialization and Setup
 
-        public CustomerWindow(CustomerUI selectedCustomerUI, List<Customer> customers,bool isUpdate)
+        public CustomerWindow(CustomerUI selectedCustomerUI,bool isUpdate)
         {
             InitializeComponent();
             customerManager = new CustomerManager(RepositoryFactory.CustomerRepository);
 
-            this.customers = customers; // Store the customers list locally
-
-            this.selectedCustomerUI = selectedCustomerUI;
+            this.customerUI = selectedCustomerUI;
 
             this.IsUpdate = isUpdate;
-
       
             if (IsUpdate)
             {
               
-                selectedCustomerMemberList = selectedCustomerUI.MembersList;
+                members = selectedCustomerUI.Members;
 
-                membersUIs = new ObservableCollection<MemberUI>(selectedCustomerMemberList.Select(x => new MemberUI(x.Id, x.Name, x.BirthDay)));
+                membersUIs = new ObservableCollection<MemberUI>(members.Select(x => MemberMapper.MapToUI(x)));
                 MemberDataGrid.ItemsSource = membersUIs;
-
 
                 IdTextBox.Text = selectedCustomerUI.Id.ToString();
                 NameTextBox.Text = selectedCustomerUI.Name;
                 EmailTextBox.Text = selectedCustomerUI.Email;
                 PhoneTextBox.Text = selectedCustomerUI.Phone;
-
-               
-
             }
         }
 
@@ -99,26 +84,17 @@ namespace HotelProject.UI.CustomerWPF
 
         #endregion
 
-        #region Customer Window Cancel Button
-
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        #endregion
-
         #region Menu Add and Delete Member Buttons
 
         private void MenuItemAddMember_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedCustomerUI == null)
+            if (customerUI == null)
             {
-                selectedCustomerUI = new CustomerUI();
-                selectedCustomerUI.MembersList = new List<Member>();
+                customerUI = new CustomerUI();
+                customerUI.Members = new List<Member>();
             }
 
-            MemberWindow w = new MemberWindow(selectedCustomerUI);
+            MemberWindow w = new MemberWindow(customerUI);
 
             if (w.ShowDialog() == true)
             {
@@ -128,16 +104,13 @@ namespace HotelProject.UI.CustomerWPF
 
                 membersUIs.Add(w.memberUI);
 
-                
+               
+                customer.Members.Add(newMember);
 
-                
-
-                // Update the MemberDataGrid with the new member
                 MemberDataGrid.ItemsSource = membersUIs;
 
-                c.Members.Add(newMember);   
             }
-               
+
         }
 
         private void MenuItemDeleteMember_Click(object sender, RoutedEventArgs e)
@@ -146,63 +119,70 @@ namespace HotelProject.UI.CustomerWPF
 
             else
             {
-                MemberUI selectedMember = (MemberUI)MemberDataGrid.SelectedItem;
+                MemberUI selectedMemberUI = (MemberUI)MemberDataGrid.SelectedItem;
+                Member member = MemberMapper.MapToDomain(selectedMemberUI);
 
-                int memberId = selectedMember.Id;
+                int memberId = selectedMemberUI.Id;
                 customerManager.DeleteMember(memberId);
 
-                membersUIs.Remove(selectedMember);
+                membersUIs.Remove(selectedMemberUI);
 
-                Member m = MemberMapper.MapToDomain(selectedMember);
+                customer.Members.Remove(member);
 
-                selectedCustomerUI.MembersList.Remove(m);
             }
 
-           
+
         }
 
         #endregion
 
-        #region Customer Update and Addition Methods
+        #region Customer Update and Add Methods
 
         private void UpdateNewCustomer()
         {
-            c.Name = NameTextBox.Text;
-            c.Id = int.Parse(IdTextBox.Text);
+            customer.Name = NameTextBox.Text;
+            customer.Id = int.Parse(IdTextBox.Text);
 
-            c.ContactInfo = new ContactInfo(EmailTextBox.Text, PhoneTextBox.Text, new Address(CityTextBox.Text, ZipTextBox.Text, HouseNumberTextBox.Text, StreetTextBox.Text));
-
-
+            customer.ContactInfo = new ContactInfo(EmailTextBox.Text, PhoneTextBox.Text, new Address(CityTextBox.Text, ZipTextBox.Text, HouseNumberTextBox.Text, StreetTextBox.Text));
 
 
-            customerManager.UpdateCustomer(c, selectedCustomerUI.Id);
-
-            selectedCustomerMemberList = MemberDataGrid.ItemsSource.Cast<MemberUI>()
+            customer.Members = MemberDataGrid.ItemsSource.Cast<MemberUI>()
                                            .Select(x => new Member(x.Id, x.Name, x.Birthday))
                                            .ToList();
 
+            customerManager.UpdateCustomer(customer, customer.Id);
 
-            selectedCustomerUI = CustomerMapper.MapToUI(c);
             
-            selectedCustomerUI.MembersList = selectedCustomerMemberList;
+
+
+            customerUI = CustomerMapper.MapToUI(customer);
+            
+            customerUI.Members = customer.Members;
         }
 
         private void AddNewCustomer()
         {
-            c.Name = NameTextBox.Text;
-            c.ContactInfo = new ContactInfo(EmailTextBox.Text, PhoneTextBox.Text, new Address(CityTextBox.Text, ZipTextBox.Text, HouseNumberTextBox.Text, StreetTextBox.Text));
+            customer.Name = NameTextBox.Text;
+            customer.ContactInfo = new ContactInfo(EmailTextBox.Text, PhoneTextBox.Text, new Address(CityTextBox.Text, ZipTextBox.Text, HouseNumberTextBox.Text, StreetTextBox.Text));
 
-            int currentId = customerManager.AddCustomer(c);
-            c.Id = currentId;
+            int currentId = customerManager.AddCustomer(customer);
+            customer.Id = currentId;
 
-            // Update the selectedCustomerUI to represent the newly added customer
 
-            selectedCustomerUI = CustomerMapper.MapToUI(c);
+            customerUI = CustomerMapper.MapToUI(customer);
 
-            selectedCustomerUI.MembersList = selectedCustomerUI.MembersList; // Assuming GetMembers() provides the updated list
+            customerUI.Members = customerUI.Members; 
 
-            // Add the new customer to the local list of customers
-            customers.Add(c);
+        
+        }
+
+        #endregion
+
+        #region Customer Window Cancel Button
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
 
         #endregion

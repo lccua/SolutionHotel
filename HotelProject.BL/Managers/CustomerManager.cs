@@ -25,9 +25,9 @@ namespace HotelProject.BL.Managers
             {
                 return _customerRepository.GetCustomers(filter);
             }
-            catch(Exception ex)
+            catch(CustomerManagerException ex)
             {
-                throw new CustomerManagerException("GetAllCustomer",ex);
+                throw new CustomerManagerException("CustomerManager: GetAllCustomer", ex);
             }
         }
 
@@ -37,9 +37,9 @@ namespace HotelProject.BL.Managers
             {
                 return _customerRepository.AddCustomer(customer);
             }
-            catch (Exception ex)
+            catch (CustomerManagerException ex)
             {
-                throw new CustomerManagerException("AddCustomer", ex);
+                throw new CustomerManagerException("CustomerManager: AddCustomer", ex);
             }
         }
 
@@ -49,9 +49,9 @@ namespace HotelProject.BL.Managers
             {
                 _customerRepository.DeleteCustomer(customerId);
             }
-            catch (Exception ex)
+            catch (CustomerManagerException ex)
             {
-                throw new CustomerManagerException("DeleteCustomer", ex);
+                throw new CustomerManagerException("CustomerManager: DeleteCustomer", ex);
             }
         }
 
@@ -61,9 +61,9 @@ namespace HotelProject.BL.Managers
             {
                 _customerRepository.DeleteMember(memberId);
             }
-            catch (Exception ex)
+            catch (CustomerManagerException ex)
             {
-                throw new CustomerManagerException("DeleteMember", ex);
+                throw new CustomerManagerException("CustomerManager: DeleteMember", ex);
             }
         }
 
@@ -73,24 +73,11 @@ namespace HotelProject.BL.Managers
             {
                 _customerRepository.UpdateCustomer(customer, id);
             }
-            catch (Exception ex)
+            catch (CustomerManagerException ex)
             {
-                throw new CustomerManagerException("UpdateCustomer", ex);
+                throw new CustomerManagerException("CustomerManager: UpdateCustomer", ex);
             }
 
-        }
-
-        public string GetHashedPasswordByUsername(string username)
-        {
-            try
-            {
-               return _customerRepository.GetHashedPasswordByUsername(username);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
         }
     }
 }

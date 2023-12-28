@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using BCrypt.Net;
+using HotelProject.BL.Exceptions.Manager;
 
 namespace HotelProject.BL.Managers
 {
@@ -21,21 +22,16 @@ namespace HotelProject.BL.Managers
         }
 
       
-
-
-       
-
-
         public void SaveOrganizer(Organizer newOrganizer)
         {
             try
             {
                 _organizerRepository.SaveOrganizer(newOrganizer);
             }
-            catch (Exception)
+            catch (OrganizerManagerException ex)
             {
 
-                throw;
+                throw new OrganizerManagerException("OrganizerManager: SaveOrganizer", ex);
             }
         }
 
@@ -45,10 +41,10 @@ namespace HotelProject.BL.Managers
             {
                return _organizerRepository.GetHashedPasswordByUsername(username);
             }
-            catch (Exception)
+            catch (OrganizerManagerException ex)
             {
 
-                throw;
+                throw new OrganizerManagerException("OrganizerManager: GetHashedPasswordByUsername", ex);
             }
         }
     }

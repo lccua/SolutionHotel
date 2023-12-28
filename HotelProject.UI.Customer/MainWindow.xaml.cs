@@ -30,44 +30,27 @@ namespace HotelProject.UI.CustomerWPF
     {
         private CustomerManager customerManager;
 
-        public List<Customer> customers;
-
-        public CustomerUI selectedCustomer;
-
-        private ObservableCollection<CustomerUI> customersUIs=new ObservableCollection<CustomerUI>();
+        public CustomerUI selectedCustomerUI;
+        private ObservableCollection<CustomerUI> customersUIs;
 
         public MainWindow()
         {
             InitializeComponent();
             customerManager = new CustomerManager(RepositoryFactory.CustomerRepository);
-            customers =  customerManager.GetCustomers(null);
 
-            customersUIs = new ObservableCollection<CustomerUI>(customers.Select(x =>
-            {
-                var customerUI = CustomerMapper.MapToUI(x);
-
-
-                // Populate MembersList
-                customerUI.MembersList = customerUI.MembersList;
-
-                return customerUI;
-            }));
-
+            customersUIs = new ObservableCollection<CustomerUI>(
+                           customerManager.GetCustomers(null).Select(x => CustomerMapper.MapToUI(x)));
 
             CustomerDataGrid.ItemsSource = customersUIs;
+
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            CustomerDataGrid.ItemsSource = new ObservableCollection<CustomerUI>(customerManager.GetCustomers(SearchTextBox.Text).Select(x => new CustomerUI(x.Id, x.Name, x.ContactInfo.Email, x.ContactInfo.Phone, x.ContactInfo.Address.ToString(), x.GetMembers().Count)));
-        }
+            customersUIs = new ObservableCollection<CustomerUI>(
+                           customerManager.GetCustomers(SearchTextBox.Text).Select(x => CustomerMapper.MapToUI(x)));
 
-        private void MenuItemAddCustomer_Click(object sender, RoutedEventArgs e)
-        {
-
-            CustomerWindow w = new CustomerWindow(null, customers, false);
-            if (w.ShowDialog()==true)
-                customersUIs.Add(w.selectedCustomerUI);
+            CustomerDataGrid.ItemsSource = customersUIs;
         }
 
         private void MenuItemDeleteCustomer_Click(object sender, RoutedEventArgs e)
@@ -83,6 +66,14 @@ namespace HotelProject.UI.CustomerWPF
             }
         }
 
+        private void MenuItemAddCustomer_Click(object sender, RoutedEventArgs e)
+        {
+
+            CustomerWindow w = new CustomerWindow(null, false);
+            if (w.ShowDialog() == true)
+                customersUIs.Add(w.customerUI);
+        }
+
         private void MenuItemUpdateCustomer_Click(object sender, RoutedEventArgs e)
         {
             if (CustomerDataGrid.SelectedItem == null)
@@ -92,23 +83,17 @@ namespace HotelProject.UI.CustomerWPF
             }
 
             int selectedIndex = CustomerDataGrid.SelectedIndex;
-            selectedCustomer = (CustomerUI)CustomerDataGrid.SelectedItem;
+            selectedCustomerUI = (CustomerUI)CustomerDataGrid.SelectedItem;
 
-            CustomerWindow w = new CustomerWindow(selectedCustomer, customers, true);
+            CustomerWindow w = new CustomerWindow(selectedCustomerUI, true);
             if (w.ShowDialog() == true)
             {
                 // Remove the old customer details from the collection
                 customersUIs.RemoveAt(selectedIndex);
 
-                // Add the updated customer details at the same index where the old details were
-                customersUIs.Insert(selectedIndex, w.selectedCustomerUI);
-
                 // Refresh the DataGrid to reflect the changes
-                CustomerDataGrid.ItemsSource = null;
-                CustomerDataGrid.ItemsSource = customersUIs;
+                customersUIs.Insert(selectedIndex,w.customerUI);
             }
         }
-
-
     }
 }

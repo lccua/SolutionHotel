@@ -14,6 +14,5 @@ namespace HotelProject.BL.Interfaces
         void DeleteCustomer (int customerId);
         void UpdateCustomer(Customer customer, int id);
         void DeleteMember(int memberId);
-        string GetHashedPasswordByUsername(string username);
     }
 }

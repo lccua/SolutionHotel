@@ -23,64 +23,71 @@ namespace HotelProject.DL.Repositories
 
         public List<Customer> GetCustomers(string searchFilter)
         {
-            List<Customer> customers = new List<Customer>();
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                connection.Open();
+                List<Customer> customers = new List<Customer>();
 
-                // Retrieve customer information with an optional search filter
-                string customerQuery = "SELECT * FROM Customer t1 WHERE t1.status = 1"; // Always true
-                if (!string.IsNullOrEmpty(searchFilter))
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    customerQuery += " AND (t1.ID LIKE @filter OR t1.name LIKE @filter OR t1.email LIKE @filter)";
-                }
+                    connection.Open();
 
-                using (SqlCommand customerCommand = new SqlCommand(customerQuery, connection))
-                {
+                    // Retrieve customer information with an optional search filter
+                    string customerQuery = "SELECT * FROM Customer t1 WHERE t1.status = 1"; // Always true
                     if (!string.IsNullOrEmpty(searchFilter))
                     {
-                        customerCommand.Parameters.AddWithValue("@filter", "%" + searchFilter + "%");
+                        customerQuery += " AND (t1.ID LIKE @filter OR t1.name LIKE @filter OR t1.email LIKE @filter)";
                     }
 
-                    using (SqlDataReader customerReader = customerCommand.ExecuteReader())
+                    using (SqlCommand customerCommand = new SqlCommand(customerQuery, connection))
                     {
-                        while (customerReader.Read())
+                        if (!string.IsNullOrEmpty(searchFilter))
                         {
-                            Customer customer = new Customer((string)customerReader["name"], (int)customerReader["id"], 
-                                                new ContactInfo((string)customerReader["email"], (string)customerReader["phone"], 
-                                                new Address((string)customerReader["address"])));
+                            customerCommand.Parameters.AddWithValue("@filter", "%" + searchFilter + "%");
+                        }
+
+                        using (SqlDataReader customerReader = customerCommand.ExecuteReader())
+                        {
+                            while (customerReader.Read())
+                            {
+                                Customer customer = new Customer((string)customerReader["name"], (int)customerReader["id"],
+                                                    new ContactInfo((string)customerReader["email"], (string)customerReader["phone"],
+                                                    new Address((string)customerReader["address"])));
 
 
-                            // Populate other properties of the Customer object
-                            customers.Add(customer);
+                                // Populate other properties of the Customer object
+                                customers.Add(customer);
+                            }
                         }
                     }
-                }
 
-                // Retrieve members associated with each customer
-                foreach (Customer customer in customers)
-                {
-                    string memberQuery = "SELECT * FROM Member WHERE customer_id = @CustomerId AND status = 1";
-                    using (SqlCommand memberCommand = new SqlCommand(memberQuery, connection))
+                    // Retrieve members associated with each customer
+                    foreach (Customer customer in customers)
                     {
-                        memberCommand.Parameters.AddWithValue("@CustomerId", customer.Id);
-
-                        using (SqlDataReader memberReader = memberCommand.ExecuteReader())
+                        string memberQuery = "SELECT * FROM Member WHERE customer_id = @CustomerId AND status = 1";
+                        using (SqlCommand memberCommand = new SqlCommand(memberQuery, connection))
                         {
-                            while (memberReader.Read())
-                            {
-                                Member member = new Member((int)memberReader["id"],(string)memberReader["name"], DateOnly.FromDateTime((DateTime)memberReader["birthday"]));
+                            memberCommand.Parameters.AddWithValue("@CustomerId", customer.Id);
 
-                                // Populate other properties of the Member object
-                                customer.Members.Add(member);
+                            using (SqlDataReader memberReader = memberCommand.ExecuteReader())
+                            {
+                                while (memberReader.Read())
+                                {
+                                    Member member = new Member((int)memberReader["id"], (string)memberReader["name"], DateOnly.FromDateTime((DateTime)memberReader["birthday"]));
+
+                                    // Populate other properties of the Member object
+                                    customer.Members.Add(member);
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            return customers;
+                return customers;
+            }
+            catch (CustomerRepositoryException ex)
+            {
+                throw new CustomerRepositoryException("CustomerRepositoryADO: GetCustomers", ex);
+            }
         }
 
         public int AddCustomer(Customer customer)
@@ -122,174 +129,163 @@ namespace HotelProject.DL.Repositories
                         }
                         transaction.Commit();
                     }
-                    catch(Exception ex)
+                    catch(CustomerRepositoryException ex)
                     {
                         transaction.Rollback();
+                        throw new CustomerRepositoryException("AddCustomer", ex);
                     }
                 }
             }
-            catch(Exception ex)
+            catch(CustomerRepositoryException ex)
             {
-                throw new CustomerRepositoryException("AddCustomer", ex);
+                throw new CustomerRepositoryException("CustomerRepositoryADO: AddCustomer", ex);
             }
             return id;
         }
 
         public void DeleteCustomer(int customerId)
         {
-            string sql = "UPDATE Customer SET status = 0 WHERE ID = @CustomerId";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                connection.Open();
-                SqlTransaction transaction = connection.BeginTransaction();
+                string sql = "UPDATE Customer SET status = 0 WHERE ID = @CustomerId";
 
-                using (SqlCommand command = new SqlCommand(sql, connection, transaction))
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    try
-                    {
-                        command.Parameters.AddWithValue("@CustomerId", customerId);
-                        int rowsAffected = command.ExecuteNonQuery(); // Execute the SQL command to update the status.
+                    connection.Open();
+                    SqlTransaction transaction = connection.BeginTransaction();
 
-                        if (rowsAffected > 0)
-                        {
-                            transaction.Commit(); // Commit the transaction if the update was successful.
-                        }
-                        else
-                        {
-                            transaction.Rollback(); // Rollback the transaction if no rows were updated (customer not found).
-                        }
-                    }
-                    catch (Exception)
+                    using (SqlCommand command = new SqlCommand(sql, connection, transaction))
                     {
-                        transaction.Rollback(); // Rollback the transaction if an exception occurs.
-                        throw; // Re-throw the exception for further handling.
+                        try
+                        {
+                            command.Parameters.AddWithValue("@CustomerId", customerId);
+                            int rowsAffected = command.ExecuteNonQuery(); // Execute the SQL command to update the status.
+
+                            if (rowsAffected > 0)
+                            {
+                                transaction.Commit(); // Commit the transaction if the update was successful.
+                            }
+                            else
+                            {
+                                transaction.Rollback(); // Rollback the transaction if no rows were updated (customer not found).
+                            }
+                        }
+                        catch (CustomerRepositoryException ex)
+                        {
+                            transaction.Rollback(); // Rollback the transaction if an exception occurs.
+                            throw new CustomerRepositoryException("CustomerRepositoryADO: DeleteCustomer", ex);
+                        }
                     }
                 }
             }
+            catch (CustomerRepositoryException ex)
+            {
+
+                throw new CustomerRepositoryException("CustomerRepositoryADO: DeleteCustomer", ex);
+            }
+
         }
 
         public void DeleteMember(int memberId)
         {
-            string sql = "UPDATE Member SET status = 0 WHERE ID = @MemberId";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                connection.Open();
-                SqlTransaction transaction = connection.BeginTransaction();
+                string sql = "UPDATE Member SET status = 0 WHERE ID = @MemberId";
 
-                using (SqlCommand command = new SqlCommand(sql, connection, transaction))
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    try
-                    {
-                        command.Parameters.AddWithValue("@MemberId", memberId);
-                        int rowsAffected = command.ExecuteNonQuery(); // Execute the SQL command to update the status.
+                    connection.Open();
+                    SqlTransaction transaction = connection.BeginTransaction();
 
-                        if (rowsAffected > 0)
-                        {
-                            transaction.Commit(); // Commit the transaction if the update was successful.
-                        }
-                        else
-                        {
-                            transaction.Rollback(); // Rollback the transaction if no rows were updated (customer not found).
-                        }
-                    }
-                    catch (Exception)
+                    using (SqlCommand command = new SqlCommand(sql, connection, transaction))
                     {
-                        transaction.Rollback(); // Rollback the transaction if an exception occurs.
-                        throw; // Re-throw the exception for further handling.
+                        try
+                        {
+                            command.Parameters.AddWithValue("@MemberId", memberId);
+                            int rowsAffected = command.ExecuteNonQuery(); // Execute the SQL command to update the status.
+
+                            if (rowsAffected > 0)
+                            {
+                                transaction.Commit(); // Commit the transaction if the update was successful.
+                            }
+                            else
+                            {
+                                transaction.Rollback(); // Rollback the transaction if no rows were updated (customer not found).
+                            }
+                        }
+                        catch (CustomerRepositoryException ex)
+                        {
+                            transaction.Rollback(); // Rollback the transaction if an exception occurs.
+                            throw new CustomerRepositoryException("CustomerRepositoryADO: DeleteMember", ex);
+                        }
                     }
                 }
             }
+            catch (CustomerRepositoryException ex)
+            {
+
+                throw new CustomerRepositoryException("CustomerRepositoryADO: DeleteMember", ex);
+            }
+
         }
 
         public void UpdateCustomer(Customer customer, int id)
         {
-            string updateSQL = "UPDATE Customer SET name = @Name, email = @Email, phone = @Phone, address = @Address WHERE ID = @CustomerId";
-            string insertSQL = "INSERT INTO member(name,birthday,customer_id,status) VALUES(@name,@birthday,@customerid,@status)";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                connection.Open();
+                string updateSQL = "UPDATE Customer SET name = @Name, email = @Email, phone = @Phone, address = @Address WHERE ID = @CustomerId";
+                string insertSQL = "INSERT INTO member(name,birthday,customer_id,status) VALUES(@name,@birthday,@customerid,@status)";
 
-                using (SqlTransaction transaction = connection.BeginTransaction())
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    try
+                    connection.Open();
+
+                    using (SqlTransaction transaction = connection.BeginTransaction())
                     {
-                        // Update operation
-                        using (SqlCommand updateCommand = new SqlCommand(updateSQL, connection, transaction))
+                        try
                         {
-                            updateCommand.Parameters.AddWithValue("@CustomerId", id);
-                            updateCommand.Parameters.AddWithValue("@Name", customer.Name);
-                            updateCommand.Parameters.AddWithValue("@Email", customer.ContactInfo.Email);
-                            updateCommand.Parameters.AddWithValue("@Phone", customer.ContactInfo.Phone);
-                            updateCommand.Parameters.AddWithValue("@Address", customer.ContactInfo.Address.ToAddressLine());
-
-                            updateCommand.ExecuteNonQuery();
-                        }
-
-                        // Insert operation
-                        using (SqlCommand insertCommand = new SqlCommand(insertSQL, connection, transaction))
-                        {
-                            foreach (Member member in customer.GetMembers())
+                            // Update operation
+                            using (SqlCommand updateCommand = new SqlCommand(updateSQL, connection, transaction))
                             {
-                                insertCommand.Parameters.Clear();
-                                insertCommand.Parameters.AddWithValue("@name", member.Name);
-                                insertCommand.Parameters.AddWithValue("@birthday", member.BirthDay.ToDateTime(TimeOnly.MinValue));
-                                insertCommand.Parameters.AddWithValue("@customerid", id);
-                                insertCommand.Parameters.AddWithValue("@status", 1);
-                                insertCommand.ExecuteNonQuery();
+                                updateCommand.Parameters.AddWithValue("@CustomerId", id);
+                                updateCommand.Parameters.AddWithValue("@Name", customer.Name);
+                                updateCommand.Parameters.AddWithValue("@Email", customer.ContactInfo.Email);
+                                updateCommand.Parameters.AddWithValue("@Phone", customer.ContactInfo.Phone);
+                                updateCommand.Parameters.AddWithValue("@Address", customer.ContactInfo.Address.ToAddressLine());
+
+                                updateCommand.ExecuteNonQuery();
                             }
+
+                            // Insert operation
+                            using (SqlCommand insertCommand = new SqlCommand(insertSQL, connection, transaction))
+                            {
+                                foreach (Member member in customer.GetMembers())
+                                {
+                                    insertCommand.Parameters.Clear();
+                                    insertCommand.Parameters.AddWithValue("@name", member.Name);
+                                    insertCommand.Parameters.AddWithValue("@birthday", member.BirthDay.ToDateTime(TimeOnly.MinValue));
+                                    insertCommand.Parameters.AddWithValue("@customerid", id);
+                                    insertCommand.Parameters.AddWithValue("@status", 1);
+                                    insertCommand.ExecuteNonQuery();
+                                }
+                            }
+
+                            transaction.Commit(); // Commit the transaction if both update and insert operations succeed
                         }
-
-                        transaction.Commit(); // Commit the transaction if both update and insert operations succeed
-                    }
-                    catch (Exception)
-                    {
-                        transaction.Rollback(); // Rollback the transaction if an exception occurs.
-                        throw; // Re-throw the exception for further handling.
+                        catch (CustomerRepositoryException ex)
+                        {
+                            transaction.Rollback(); // Rollback the transaction if an exception occurs.
+                            throw new CustomerRepositoryException("CustomerRepositoryADO: UpdateCustomer", ex);
+                        }
                     }
                 }
             }
-        }
-
-
-
-        public string GetHashedPasswordByUsername(string username)
-        {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            catch (CustomerRepositoryException ex)
             {
-                connection.Open();
 
-                // Use parameterized query to avoid SQL injection
-                string query = "SELECT password_hash FROM Organizer WHERE username = @Username";
-
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Username", username);
-
-                    // Execute the query
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    // Check if a user was found
-                    if (reader.Read())
-                    {
-                        // Retrieve hashed_password and salt from the database
-                        string hashedPassword = (string)reader["password_hash"];
-
-
-
-
-                        return hashedPassword;
-                    }
-                    else
-                    {
-                        // User not found
-                        // Return some default values or throw an exception based on your error handling strategy
-                        return null;
-                    }
-                }
+                throw new CustomerRepositoryException("CustomerRepositoryADO: UpdateCustomer", ex);
             }
+           
         }
 
     }
